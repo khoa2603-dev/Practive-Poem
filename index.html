@@ -1,0 +1,4058 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIẢI CỨU VẦN THƠ — Gom từng con chữ, Gửi trọn hồn thơ</title>
+  <meta name="description" content="Trò chơi giáo dục khôi phục vần điệu thơ ca dành cho giáo viên và học sinh Ngữ văn lớp 6–7. Tương tác kéo thả mượt mà trên máy chiếu và bảng tương tác.">
+
+  <!-- Google Fonts tiếng Việt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       BẢNG MÀU VÀ THIẾT KẾ: SÁCH CỔ TÍCH HIỆN ĐẠI (PARCHMENT)
+       ========================================================= */
+    :root {
+      --bg-parchment: #F7EFD9;
+      --bg-parchment-light: #FBF8EE;
+      --bg-parchment-card: #FFFFFF;
+      --bg-parchment-dark: #EADCB9;
+
+      --color-emerald: #377F78;
+      --color-emerald-dark: #245A55;
+      --color-emerald-light: #E6F3F1;
+
+      --color-amber: #D5A85F;
+      --color-amber-dark: #9F762B;
+      --color-amber-light: #FDF6E8;
+
+      --color-ink: #4D4033;
+      --color-ink-light: #706253;
+      --color-ink-faint: #A89B8C;
+
+      --color-ruby: #B83A3A;
+      --color-ruby-light: #FDF0F0;
+
+      --color-correct: #2A8754;
+      --color-correct-bg: #EAF7EE;
+      --color-wrong: #D97706;
+      --color-wrong-bg: #FEF3C7;
+
+      --font-serif: 'Lora', 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      --card-min-width: 58px;
+      --card-height: 52px;
+      --card-font-size: 1.15rem;
+      --slot-min-width: 64px;
+      --slot-height: 56px;
+
+      --shadow-sm: 0 2px 4px rgba(77, 64, 51, 0.08);
+      --shadow-md: 0 4px 12px rgba(77, 64, 51, 0.12);
+      --shadow-lg: 0 8px 24px rgba(77, 64, 51, 0.16);
+      --shadow-card: 0 3px 6px rgba(77, 64, 51, 0.12), 0 1px 2px rgba(77, 64, 51, 0.08);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+    }
+
+    /* CHẾ ĐỘ MÁY CHIẾU LỚP HỌC (PROJECTOR MODE 16:9) */
+    body.projector-mode {
+      --card-min-width: 76px;
+      --card-height: 66px;
+      --card-font-size: 1.48rem;
+      --slot-min-width: 82px;
+      --slot-height: 70px;
+    }
+
+    body.projector-mode .parchment-board {
+      max-width: 96% !important;
+      font-size: 1.2rem;
+    }
+
+    body.projector-mode .word-card {
+      font-weight: 700 !important;
+      box-shadow: 0 4px 12px rgba(55, 60, 50, 0.25) !important;
+    }
+
+    /* CƠ BẢN */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--bg-parchment);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    body {
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(213, 168, 95, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(55, 127, 120, 0.08) 0%, transparent 40%),
+        linear-gradient(to bottom, #FAF5E8 0%, #F5ECDA 100%);
+      background-attachment: fixed;
+    }
+
+    /* TOP BAR */
+    .top-navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(251, 248, 238, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid #E6D8B5;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--color-emerald) 0%, var(--color-emerald-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      box-shadow: 0 4px 10px rgba(55, 127, 120, 0.3);
+    }
+
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--color-emerald-dark);
+      line-height: 1.15;
+    }
+
+    .brand-slogan {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--color-ink-light);
+      font-family: var(--font-serif);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-emerald) 0%, #26655F 100%);
+      color: #FFFFFF;
+      box-shadow: 0 3px 8px rgba(55, 127, 120, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3E8D85 0%, #2B706A 100%);
+      transform: translateY(-1px);
+    }
+
+    .btn-amber {
+      background: linear-gradient(135deg, #E5B869 0%, var(--color-amber) 100%);
+      color: #382A14;
+      border: 1px solid #BF9245;
+      box-shadow: 0 3px 8px rgba(213, 168, 95, 0.3);
+    }
+
+    .btn-amber:hover {
+      background: linear-gradient(135deg, #ECC278 0%, #DCB067 100%);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #FFFFFF;
+      color: var(--color-ink);
+      border: 1px solid #D9C8A3;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-parchment-light);
+      border-color: var(--color-amber);
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: var(--radius-md);
+      background: #FFFFFF;
+      color: var(--color-ink);
+      border: 1px solid #D9C8A3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      background: var(--color-amber-light);
+      border-color: var(--color-amber);
+      color: var(--color-amber-dark);
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-emerald {
+      background: var(--color-emerald-light);
+      color: var(--color-emerald-dark);
+      border: 1px solid #B8DFDA;
+    }
+
+    .badge-amber {
+      background: var(--color-amber-light);
+      color: var(--color-amber-dark);
+      border: 1px solid #ECCB90;
+    }
+
+    /* MAIN CONTAINER */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* TOOLBAR */
+    .game-controls-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.88);
+      border-radius: var(--radius-lg);
+      border: 1px solid #E4D5B2;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timer-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #FFF;
+      border: 1.5px solid #D6C5A0;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-ink);
+      cursor: pointer;
+    }
+
+    .timer-pill.timer-urgent {
+      background: var(--color-ruby-light);
+      border-color: var(--color-ruby);
+      color: var(--color-ruby);
+      animation: pulseUrgent 1s infinite alternate;
+    }
+
+    /* PARCHMENT POEM BOARD */
+    .parchment-board {
+      background: var(--bg-parchment-light);
+      border: 2px solid #E1D2AC;
+      border-radius: var(--radius-xl);
+      padding: 24px 30px;
+      box-shadow: var(--shadow-md), inset 0 0 40px rgba(213, 168, 95, 0.08);
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .parchment-board::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 1px dashed #DFCFA3;
+      border-radius: calc(var(--radius-xl) - 4px);
+      pointer-events: none;
+    }
+
+    .poem-header-meta {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #EADBB9;
+    }
+
+    .poem-title-display {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--color-emerald-dark);
+      margin-bottom: 4px;
+    }
+
+    .poem-author-display {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--color-ink-light);
+      font-family: var(--font-serif);
+    }
+
+    .poem-lines-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      margin: 10px 0 20px;
+    }
+
+    .poem-line-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+      padding: 6px 12px;
+      border-radius: var(--radius-lg);
+      transition: background-color 0.3s ease;
+    }
+
+    .poem-line-row.line-correct {
+      background: rgba(42, 135, 84, 0.07);
+    }
+
+    .line-number-badge {
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      color: var(--color-ink-faint);
+      width: 24px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .line-slots-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* SLOTS */
+    .poem-slot {
+      min-width: var(--slot-min-width);
+      height: var(--slot-height);
+      padding: 4px 8px;
+      border-radius: var(--radius-md);
+      border: 2px dashed #D5C29B;
+      background: rgba(255, 255, 255, 0.55);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .poem-slot:hover {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: var(--color-amber);
+    }
+
+    .poem-slot.slot-dragover {
+      border-color: var(--color-emerald);
+      background: var(--color-emerald-light);
+      transform: scale(1.05);
+      box-shadow: 0 0 14px rgba(55, 127, 120, 0.35);
+    }
+
+    .poem-slot.slot-selected-target {
+      border: 2px solid var(--color-amber);
+      background: #FFF9E6;
+      box-shadow: 0 0 12px rgba(213, 168, 95, 0.4);
+      animation: pulseSlot 1.5s infinite;
+    }
+
+    .poem-slot.slot-correct {
+      border-style: solid;
+      border-color: var(--color-correct);
+      background: var(--color-correct-bg);
+      box-shadow: 0 0 10px rgba(42, 135, 84, 0.2);
+    }
+
+    .poem-slot.slot-wrong {
+      border-style: solid;
+      border-color: var(--color-wrong);
+      background: var(--color-wrong-bg);
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.2);
+    }
+
+    .slot-empty-placeholder {
+      font-size: 0.85rem;
+      color: #BDB09A;
+      font-style: italic;
+    }
+
+    .slot-hint-letter {
+      position: absolute;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: rgba(55, 127, 120, 0.5);
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .slot-rhyme-glow {
+      animation: rhymeGlow 1.2s infinite alternate;
+    }
+
+    /* WORD CARDS */
+    .word-card {
+      min-width: var(--card-min-width);
+      height: var(--card-height);
+      padding: 0 14px;
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #DAC9A4;
+      box-shadow: var(--shadow-card);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--card-font-size);
+      font-weight: 600;
+      color: var(--color-ink);
+      cursor: grab;
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      touch-action: none;
+    }
+
+    .word-card:active {
+      cursor: grabbing;
+    }
+
+    .word-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-amber);
+    }
+
+    .word-card.card-selected {
+      border: 2px solid var(--color-amber-dark);
+      background: #FFFDF5;
+      box-shadow: 0 0 0 3px rgba(213, 168, 95, 0.4), var(--shadow-md);
+      transform: translateY(-3px) scale(1.04);
+    }
+
+    .word-card.card-fixed {
+      background: #F3EBD8;
+      border: 1.5px solid #D6C49D;
+      color: #6B5B49;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .word-card.card-in-slot {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .word-card.card-correct {
+      color: #17643A;
+      font-weight: 700;
+    }
+
+    .word-card.card-wrong {
+      color: #92400E;
+      font-weight: 700;
+    }
+
+    .card-status-icon {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .card-status-icon.correct {
+      background: var(--color-correct);
+    }
+
+    .card-status-icon.wrong {
+      background: var(--color-wrong);
+    }
+
+    /* WORD TRAY (VÙNG TỪ THẤT LẠC) */
+    .word-tray-container {
+      background: #FFFFFF;
+      border: 2px solid #E6D8B8;
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .word-tray-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #E2D3AF;
+    }
+
+    .word-tray-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-emerald-dark);
+    }
+
+    .word-tray-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      min-height: 80px;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background: var(--bg-parchment-light);
+      border-radius: var(--radius-lg);
+      border: 1px solid #ECE0C6;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(43, 36, 28, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      border: 2px solid #E2D2AA;
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #EFE4CA;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-parchment-light);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #EFE4CA;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--bg-parchment-light);
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #D6C6A2;
+      background: #FFFFFF;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--color-emerald);
+      box-shadow: 0 0 0 3px rgba(55, 127, 120, 0.2);
+    }
+
+    .form-textarea {
+      min-height: 110px;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    /* KEYFRAMES */
+    @keyframes pulseSlot {
+      0% { box-shadow: 0 0 0 0 rgba(213, 168, 95, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(213, 168, 95, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(213, 168, 95, 0); }
+    }
+
+    @keyframes rhymeGlow {
+      0% { border-color: var(--color-amber); box-shadow: 0 0 6px var(--color-amber); }
+      100% { border-color: var(--color-emerald); box-shadow: 0 0 14px var(--color-emerald); }
+    }
+
+    @keyframes pulseUrgent {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    /* CANVAS OVERLAYS */
+    #windCanvas, #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       GAME MODE SELECTOR BAR
+    ═══════════════════════════════════════════════════════════ */
+    .game-mode-selector {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1.5px solid #E6D8B5;
+      padding: 10px 24px;
+      position: sticky;
+      top: 67px;
+      z-index: 90;
+      box-shadow: 0 2px 8px rgba(77, 64, 51, 0.06);
+    }
+
+    .mode-selector-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-ink-light);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .mode-cards-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .mode-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #E0D1AF;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      text-align: left;
+      min-width: 170px;
+      flex: 1;
+      max-width: 240px;
+      font-family: var(--font-sans);
+    }
+
+    .mode-card:hover {
+      border-color: var(--color-amber);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .mode-card.mode-card-active {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+      border-width: 2px;
+    }
+
+    .mode-card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      background: #F5EFE3;
+    }
+
+    .mode-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .mode-card-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.2;
+      transition: color 0.2s;
+    }
+
+    .mode-card-subtitle {
+      font-size: 0.75rem;
+      color: var(--color-ink-faint);
+      line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       THÁM TỬ BẮT LỖI (SPOT IMPOSTOR) GAME
+    ═══════════════════════════════════════════════════════════ */
+    .impostor-game-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .impostor-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #FDF0F0 0%, #FAE6E6 100%);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid #F5CCCC;
+    }
+
+    .impostor-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .impostor-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .impostor-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #8B2323;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+
+    .impostor-subtitle {
+      font-size: 0.9rem;
+      color: #7A4040;
+      margin: 2px 0 0;
+    }
+
+    .impostor-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: #FFF;
+      border: 1.5px solid #F0CCCC;
+      font-size: 0.88rem;
+      color: var(--color-ink);
+      font-weight: 600;
+    }
+
+    .impostor-hint-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--color-amber-light);
+      border: 1px solid #ECCB90;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      color: var(--color-ink);
+    }
+
+    .impostor-result-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .result-perfect {
+      background: var(--color-correct-bg);
+      border: 1.5px solid var(--color-correct);
+      color: #1A6B40;
+    }
+
+    .result-good {
+      background: var(--color-amber-light);
+      border: 1.5px solid var(--color-amber);
+      color: var(--color-amber-dark);
+    }
+
+    .result-try-again {
+      background: var(--color-ruby-light);
+      border: 1.5px solid var(--color-ruby);
+      color: var(--color-ruby);
+    }
+
+    .impostor-parchment {
+      background: var(--bg-parchment-light);
+      border: 2px solid #E1D2AC;
+      border-radius: var(--radius-xl);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-md), inset 0 0 40px rgba(213, 168, 95, 0.06);
+      position: relative;
+    }
+
+    .impostor-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .impostor-line-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 4px 0;
+    }
+
+    .impostor-words-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .impostor-word {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid transparent;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+      background: rgba(255, 255, 255, 0.65);
+      color: var(--color-ink);
+      user-select: none;
+    }
+
+    .impostor-word:hover {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: #DDD;
+    }
+
+    .impostor-word.word-suspected {
+      background: #FFF9E6;
+      border-color: var(--color-amber);
+      color: var(--color-amber-dark);
+      box-shadow: 0 0 0 2px rgba(213, 168, 95, 0.3);
+      font-weight: 600;
+    }
+
+    .impostor-word.word-caught-correct {
+      background: var(--color-correct-bg);
+      border-color: var(--color-correct);
+      color: #1A6B40;
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .impostor-word.word-missed-impostor {
+      background: var(--color-ruby-light);
+      border-color: var(--color-ruby);
+      color: var(--color-ruby);
+      font-weight: 700;
+      cursor: default;
+      animation: shakeHint 0.4s ease;
+    }
+
+    .impostor-word.word-wrong-selection {
+      background: var(--color-wrong-bg);
+      border-color: var(--color-wrong);
+      color: #92400E;
+      cursor: default;
+    }
+
+    .word-correct-tooltip {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-correct);
+      white-space: nowrap;
+      font-family: var(--font-sans);
+    }
+
+    .impostor-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px 0 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       XẾP LẠI HÀNG NGŨ (SORT LINES) GAME
+    ═══════════════════════════════════════════════════════════ */
+    .sort-lines-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sort-lines-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #F0ECF9 0%, #E8DFFB 100%);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid #D5C7F0;
+    }
+
+    .sort-lines-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sort-lines-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #4A2E8A;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+
+    .sort-lines-subtitle {
+      font-size: 0.9rem;
+      color: #5E3EA0;
+      margin: 2px 0 0;
+    }
+
+    .sort-lines-score-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .score-perfect {
+      background: var(--color-correct-bg);
+      border: 1.5px solid var(--color-correct);
+      color: #1A6B40;
+    }
+
+    .score-good {
+      background: var(--color-amber-light);
+      border: 1.5px solid var(--color-amber);
+      color: var(--color-amber-dark);
+    }
+
+    .score-retry {
+      background: var(--color-ruby-light);
+      border: 1.5px solid var(--color-ruby);
+      color: var(--color-ruby);
+    }
+
+    .sort-lines-parchment {
+      background: var(--bg-parchment-light);
+      border: 2px solid #E1D2AC;
+      border-radius: var(--radius-xl);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-md), inset 0 0 40px rgba(213, 168, 95, 0.06);
+    }
+
+    .sort-lines-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .sort-line-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #E0D4B6;
+      background: #FFFFFF;
+      cursor: grab;
+      transition: all 0.2s ease;
+      min-height: 56px;
+      box-shadow: var(--shadow-sm);
+      user-select: none;
+    }
+
+    .sort-line-item:hover {
+      border-color: var(--color-amber);
+      box-shadow: var(--shadow-md);
+    }
+
+    .sort-line-dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+      transform: scale(0.98);
+    }
+
+    .sort-line-dragover {
+      border-color: var(--color-emerald);
+      background: var(--color-emerald-light);
+      transform: scale(1.01);
+      box-shadow: 0 0 14px rgba(55, 127, 120, 0.25);
+    }
+
+    .sort-line-selected {
+      border-color: var(--color-amber-dark);
+      background: #FFFDF0;
+      box-shadow: 0 0 0 3px rgba(213, 168, 95, 0.4), var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .sort-line-correct {
+      background: var(--color-correct-bg);
+      border-color: var(--color-correct);
+      cursor: default;
+    }
+
+    .sort-line-wrong {
+      background: var(--color-wrong-bg);
+      border-color: var(--color-wrong);
+      cursor: default;
+    }
+
+    .sort-line-drag-handle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      cursor: grab;
+    }
+
+    .sort-line-number {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-ink-faint);
+      width: 22px;
+      text-align: center;
+    }
+
+    .sort-line-text {
+      flex: 1;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--color-ink);
+      line-height: 1.4;
+    }
+
+    .sort-line-hint {
+      font-size: 0.8rem;
+      color: var(--color-wrong);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    .sort-line-arrows {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+
+    .sort-arrow-btn {
+      width: 32px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid #D9C8A3;
+      background: #FFF;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      color: var(--color-ink);
+    }
+
+    .sort-arrow-btn:hover:not(:disabled) {
+      background: var(--color-amber-light);
+      border-color: var(--color-amber);
+    }
+
+    .sort-arrow-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .sort-line-status {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MỰC TÀNG HÌNH (INK FADER) GAME
+    ═══════════════════════════════════════════════════════════ */
+    .inkfader-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .inkfader-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #EEF5F3 0%, #DDF0EB 100%);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid #BDD8D4;
+    }
+
+    .inkfader-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .inkfader-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #2A5C54;
+      margin: 0;
+      font-family: var(--font-sans);
+    }
+
+    .inkfader-subtitle {
+      font-size: 0.9rem;
+      color: #3D7068;
+      margin: 2px 0 0;
+    }
+
+    .inkfader-level-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .inkfader-level-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #E0D4B6;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+      text-align: left;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .inkfader-level-btn:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .level-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .level-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .level-info strong {
+      font-size: 0.88rem;
+      line-height: 1.2;
+    }
+
+    .level-info span {
+      font-size: 0.75rem;
+      color: var(--color-ink-faint);
+    }
+
+    .level-active {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .inkfader-tip-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 10px 16px;
+      background: var(--bg-parchment-light);
+      border: 1px solid #DECFA9;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      color: var(--color-ink);
+    }
+
+    .inkfader-parchment {
+      background: var(--bg-parchment-light);
+      border: 2px solid #E1D2AC;
+      border-radius: var(--radius-xl);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-md), inset 0 0 40px rgba(213, 168, 95, 0.06);
+    }
+
+    .inkfader-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .inkfader-line-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px dashed #D5C29B;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.5);
+      min-height: 52px;
+      user-select: none;
+    }
+
+    .inkfader-line-row:hover {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: var(--color-amber);
+      border-style: solid;
+    }
+
+    .inkfader-line-row.line-revealed {
+      background: rgba(42, 135, 84, 0.06);
+      border-color: rgba(42, 135, 84, 0.3);
+      border-style: solid;
+    }
+
+    .inkfader-words-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .inkfader-word {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      transition: all 0.25s ease;
+      padding: 1px 3px;
+      border-radius: 4px;
+    }
+
+    .inkfader-word.word-hidden {
+      color: #A89B8C;
+      background: rgba(168, 155, 140, 0.14);
+      padding: 1px 8px;
+      letter-spacing: 2px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .inkfader-word.word-visible {
+      color: var(--color-ink);
+    }
+
+    .inkfader-toggle-icon {
+      flex-shrink: 0;
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+    }
+
+    @keyframes shakeHint {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Responsive for mode selector */
+    @media (max-width: 768px) {
+      .game-mode-selector {
+        padding: 8px 12px;
+        top: 60px;
+      }
+
+      .mode-cards-grid {
+        gap: 6px;
+      }
+
+      .mode-card {
+        min-width: 0;
+        padding: 6px 10px;
+        flex: 1;
+        max-width: none;
+      }
+
+      .mode-card-subtitle {
+        display: none;
+      }
+
+      .mode-card-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 1.1rem;
+      }
+
+      .mode-card-title {
+        font-size: 0.8rem;
+      }
+
+      .inkfader-level-btn {
+        min-width: 0;
+        flex: 1;
+        padding: 8px 10px;
+      }
+
+      .level-info span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="top-navbar">
+    <div class="brand-wrapper" onclick="openLibraryModal()" title="Về thư viện bài thơ">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">GIẢI CỨU VẦN THƠ</h1>
+        <p class="brand-slogan">Gom từng con chữ – Gửi trọn hồn thơ</p>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Projector Toggle -->
+      <button class="btn btn-secondary" id="btnProjector" onclick="toggleProjectorMode()" title="Bật/Tắt chế độ máy chiếu chữ cực to cho lớp học">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+        <span id="txtProjector">Máy chiếu</span>
+      </button>
+
+      <!-- Library -->
+      <button class="btn btn-secondary" onclick="openLibraryModal()" title="Kho bài thơ đã lưu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>Thư viện thơ</span>
+      </button>
+
+      <!-- Teacher Creator -->
+      <button class="btn btn-primary" onclick="openTeacherEditor()" title="Soạn bài thơ mới">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        <span>Tạo màn chơi</span>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button class="btn-icon" id="btnSound" onclick="toggleSound()" title="Bật/Tắt âm thanh">
+        <svg id="iconSoundOn" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#377F78" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg id="iconSoundOff" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B83A3A" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button class="btn-icon" onclick="toggleFullscreen()" title="Toàn màn hình">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </button>
+
+      <!-- Guide / Help -->
+      <button class="btn-icon" onclick="openHelpModal()" title="Hướng dẫn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- GAME MODE SELECTOR BAR -->
+  <nav class="game-mode-selector">
+    <div class="mode-selector-header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#377F78" stroke-width="2">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>Chọn hình thức kiểm tra</span>
+    </div>
+
+    <div class="mode-cards-grid">
+      <!-- Mode 1: Giải cứu vần thơ -->
+      <button class="mode-card mode-card-active" id="btnModeRescue" onclick="switchGameMode('rescue')" style="border-color: #377F78; background: linear-gradient(135deg, #E6F3F1 0%, #D0EAE6 100%);">
+        <div class="mode-card-icon" style="color: #377F78; background: rgba(55, 127, 120, 0.15);">💨</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title" style="color: #377F78;">Giải cứu vần thơ</div>
+          <div class="mode-card-subtitle">Gió thổi bay — Ghép từ vào ô trống</div>
+        </div>
+      </button>
+
+      <!-- Mode 2: Thám tử bắt lỗi -->
+      <button class="mode-card" id="btnModeSpotImpostor" onclick="switchGameMode('spot-impostor')">
+        <div class="mode-card-icon" style="color: #B83A3A;">🔍</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Thám tử bắt lỗi</div>
+          <div class="mode-card-subtitle">Tìm từ bị thay sai trong bài thơ</div>
+        </div>
+      </button>
+
+      <!-- Mode 3: Xếp lại hàng ngũ -->
+      <button class="mode-card" id="btnModeSortLines" onclick="switchGameMode('sort-lines')">
+        <div class="mode-card-icon" style="color: #6B4CB9;">🔀</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Xếp lại hàng ngũ</div>
+          <div class="mode-card-subtitle">Sắp xếp lại trật tự câu thơ</div>
+        </div>
+      </button>
+
+      <!-- Mode 4: Mực tàng hình -->
+      <button class="mode-card" id="btnModeInkFader" onclick="switchGameMode('ink-fader')">
+        <div class="mode-card-icon" style="color: #5C7A6E;">🌫</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Mực tàng hình</div>
+          <div class="mode-card-subtitle">Ẩn dần từ — Luyện thuộc lòng</div>
+        </div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN APP -->
+  <main class="main-content">
+    <!-- ─── CHẾ ĐỘ 1: GIẢI CỨU VẦN THƠ (GỐC) ─── -->
+    <div id="rescueModeContainer">
+      <!-- TOOLBAR -->
+      <div class="game-controls-toolbar">
+      <div class="controls-left">
+        <!-- Thổi bay -->
+        <button class="btn btn-amber" onclick="handleBlowWind()" title="Kích hoạt cơn gió xáo trộn lại các con chữ">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+          </svg>
+          <span>Thổi bay vần thơ</span>
+        </button>
+
+        <!-- Kiểm tra -->
+        <button class="btn btn-primary" onclick="handleCheck()" title="Kiểm tra các vị trí đúng/sai">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span>Kiểm tra bài</span>
+        </button>
+
+        <!-- Gợi ý -->
+        <button class="btn btn-secondary" onclick="handleHint()" title="Gợi ý sư phạm 3 cấp độ">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D5A85F" stroke-width="2">
+            <line x1="9" y1="18" x2="15" y2="18"></line>
+            <line x1="10" y1="22" x2="14" y2="22"></line>
+            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+          </svg>
+          <span id="txtHint">Gợi ý</span>
+        </button>
+      </div>
+
+      <div class="controls-right">
+        <!-- Hoàn tác -->
+        <button class="btn btn-secondary" id="btnUndo" onclick="handleUndo()" title="Hoàn tác bước đi (Ctrl+Z)" disabled style="opacity: 0.5;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v6h6"></path>
+            <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
+          </svg>
+          <span>Hoàn tác</span>
+        </button>
+
+        <!-- Làm lại -->
+        <button class="btn btn-secondary" onclick="handleResetRound()" title="Thu hồi thẻ về kho">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>Làm lại</span>
+        </button>
+
+        <!-- Hiện đáp án -->
+        <button class="btn btn-secondary" onclick="openConfirmSolution()" title="Dành cho giáo viên: Mở toàn bộ đáp án">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>Hiện đáp án</span>
+        </button>
+
+        <!-- Timer -->
+        <div class="timer-pill" id="timerPill" onclick="toggleTimer()" style="display:none;" title="Nhấp để tạm dừng/tiếp tục">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span id="timerText">01:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARCHMENT BOARD -->
+    <div class="parchment-board">
+      <div class="poem-header-meta">
+        <h2 class="poem-title-display" id="poemTitleDisplay">Trang thơ sân trường</h2>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 4px;">
+          <span class="badge badge-amber" id="roundBadge">Khổ 1 / 1</span>
+          <span style="font-size: 0.9rem; color: var(--color-ink-light); font-style: italic;" id="poemMetaDisplay">
+            Bài thơ minh họa (Ngữ văn 6 - 7)
+          </span>
+        </div>
+      </div>
+
+      <div class="poem-lines-container" id="poemLinesContainer">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </div>
+
+    <!-- WORD TRAY (VÙNG TỪ THẤT LẠC) -->
+    <div class="word-tray-container" id="wordTrayContainer" ondragover="handleTrayDragOver(event)" ondragleave="handleTrayDragLeave(event)" ondrop="handleTrayDrop(event)" onclick="handleTrayClick()">
+      <div class="word-tray-header">
+        <div class="word-tray-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#377F78" stroke-width="2">
+            <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+          </svg>
+          <span>Vùng từ thất lạc (Gió thổi bay)</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="badge badge-amber" id="trayActionNotice" style="display:none; cursor:pointer;">
+            Nhấp vào đây để trả thẻ về kho
+          </span>
+          <span class="badge badge-emerald" id="trayCountBadge">
+            Còn 8 từ cần giải cứu
+          </span>
+        </div>
+      </div>
+
+      <div class="word-tray-cards" id="wordTrayCards">
+        <!-- Word cards rendered by JavaScript -->
+      </div>
+    </div>
+    </div> <!-- END #rescueModeContainer -->
+
+    <!-- ─── CHẾ ĐỘ 2: THÁM TỬ BẮT LỖI CONTAINER ─── -->
+    <div id="impostorModeContainer" style="display:none;"></div>
+
+    <!-- ─── CHẾ ĐỘ 3: XẾP LẠI HÀNG NGŨ CONTAINER ─── -->
+    <div id="sortLinesModeContainer" style="display:none;"></div>
+
+    <!-- ─── CHẾ ĐỘ 4: MỰC TÀNG HÌNH CONTAINER ─── -->
+    <div id="inkFaderModeContainer" style="display:none;"></div>
+  </main>
+
+  <!-- MODALS CONTAINER -->
+  <div id="modalContainer"></div>
+
+  <!-- CANVAS FOR WIND & CONFETTI -->
+  <canvas id="windCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- =========================================================
+       JAVASCRIPT: TOÀN BỘ LOGIC KỸ THUẬT & TRẢI NGHIỆM LỚP HỌC
+       ========================================================= -->
+  <script>
+    // 1. DỮ LIỆU BÀI THƠ MẪU CHUẨN ĐẶC TẢ
+    const SAMPLE_POEMS = [
+      {
+        id: 'sample-trang-tho-san-truong',
+        title: 'Trang thơ sân trường',
+        author: 'Bài thơ minh họa (Ngữ văn 6 - 7)',
+        grade: 'Lớp 6 – Kết nối tri thức',
+        content: `Nắng lên trên mái sân trường\nTrang thơ mở lối yêu thương mỗi ngày`,
+        splitMode: 'syllable',
+        difficulty: 'medium',
+        timeLimit: 60,
+        checkMode: 'whole',
+        comprehensionQuestion: 'Em nhận thấy tiếng nào tạo nên vần liên kết giữa hai dòng thơ?',
+        comprehensionGuidance: 'Định hướng: Tiếng "trường" (tiếng thứ 6 câu 6) hiệp vần với tiếng "thương" (tiếng thứ 6 câu 8) - Quy luật vần lưng (ương) của thể thơ lục bát.',
+        autoSplitRounds: true
+      },
+      {
+        id: 'sample-hat-gao-lang-ta',
+        title: 'Hạt gạo làng ta',
+        author: 'Trần Đăng Khoa',
+        grade: 'Lớp 6 – Văn học thiếu nhi',
+        content: `Hạt gạo làng ta\nCó vị phù sa\nCủa sông Kinh Thầy\nCó hương sen thơm\nTrong hồ nước đầy`,
+        splitMode: 'syllable',
+        difficulty: 'easy',
+        timeLimit: 90,
+        checkMode: 'line',
+        comprehensionQuestion: 'Hình ảnh hạt gạo được tạo nên từ những vẻ đẹp thiên nhiên nào của quê hương?',
+        comprehensionGuidance: 'Định hướng: Vị phù sa sông Kinh Thầy và hương hoa sen thơm ngát trong hồ nước đầy.',
+        autoSplitRounds: true
+      },
+      {
+        id: 'sample-chuyen-co-nuoc-minh',
+        title: 'Chuyện cổ nước mình',
+        author: 'Lâm Thị Mỹ Dạ',
+        grade: 'Lớp 6 – Bài học đường đời đầu tiên',
+        content: `Tôi yêu truyện cổ nước tôi\nVừa nhân hậu lại tuyệt vời sâu xa\nThương người rồi mới thương ta\nYêu nhau dù mấy cách xa cũng tìm`,
+        splitMode: 'syllable',
+        difficulty: 'medium',
+        timeLimit: 60,
+        checkMode: 'whole',
+        comprehensionQuestion: 'Qua những câu thơ trên, chuyện cổ nước mình đã để lại bài học đạo lý gì cho mỗi chúng ta?',
+        comprehensionGuidance: 'Định hướng: Bài học về lòng nhân ái "thương người rồi mới thương ta" và tình nghĩa thuỷ chung son sắt.',
+        autoSplitRounds: true
+      },
+      {
+        id: 'sample-uoc-mo-thoi-ao-trang',
+        title: 'Ước mơ thời áo trắng',
+        author: 'Thơ kết nối tri thức',
+        grade: 'Lớp 7 – Ngữ văn nhà trường',
+        content: `Gió đưa hương cốm dịu dàng\nCánh chim ríu rít tưng bừng vòm cây\nBút nghiêng nét chữ dâng đầy\nThầy cô chắp cánh từng ngày ước mơ`,
+        splitMode: 'syllable',
+        difficulty: 'hard',
+        timeLimit: 90,
+        checkMode: 'whole',
+        comprehensionQuestion: 'Từ ngữ và hình ảnh nào thể hiện lòng biết ơn của học sinh đối với thầy cô giáo?',
+        comprehensionGuidance: 'Định hướng: "Thầy cô chắp cánh từng ngày ước mơ" - hình ảnh nâng niu, dìu dắt tri thức và khát vọng.',
+        autoSplitRounds: true
+      }
+    ];
+
+    // 2. WEB AUDIO API SYNTHESIZER (100% NỘI BỘ, KHÔNG PHỤ THUỘC FILE NGOÀI)
+    let audioCtx = null;
+    let isSoundMuted = localStorage.getItem('gcvt_sound_muted') === 'true';
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    const sound = {
+      pick() {
+        if (isSoundMuted) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(587.33, audioCtx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.08);
+        } catch(e){}
+      },
+      snap() {
+        if (isSoundMuted) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.09);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.09);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.09);
+        } catch(e){}
+      },
+      correct() {
+        if (isSoundMuted) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+          const notes = [523.25, 659.25, 783.99, 1046.5];
+          notes.forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.07);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime + i * 0.07);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.07 + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + i * 0.07);
+            osc.stop(audioCtx.currentTime + i * 0.07 + 0.35);
+          });
+        } catch(e){}
+      },
+      wrong() {
+        if (isSoundMuted) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(260, audioCtx.currentTime);
+          osc.frequency.linearRampToValueAtTime(220, audioCtx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.15);
+        } catch(e){}
+      },
+      wind() {
+        if (isSoundMuted) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+          const duration = 1.2;
+          const bufferSize = audioCtx.sampleRate * duration;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const output = buffer.getChannelData(0);
+          let b0 = 0, b1 = 0, b2 = 0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99 * b0 + white * 0.05;
+            b1 = 0.95 * b1 + white * 0.1;
+            b2 = 0.85 * b2 + white * 0.2;
+            output[i] = (b0 + b1 + b2) * 0.15;
+          }
+          const whiteNoise = audioCtx.createBufferSource();
+          whiteNoise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(300, audioCtx.currentTime);
+          filter.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.4);
+          filter.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + duration);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 0.3);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+          whiteNoise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          whiteNoise.start();
+          whiteNoise.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+      },
+      fanfare() {
+        if (isSoundMuted) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+          const melody = [
+            { f: 523.25, d: 0.12 }, { f: 659.25, d: 0.12 },
+            { f: 783.99, d: 0.12 }, { f: 1046.5, d: 0.28 },
+            { f: 880.0, d: 0.12 }, { f: 1046.5, d: 0.45 }
+          ];
+          let time = audioCtx.currentTime;
+          melody.forEach(n => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(n.f, time);
+            gain.gain.setValueAtTime(0.18, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + n.d);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time);
+            osc.stop(time + n.d);
+            time += n.d * 0.9;
+          });
+        } catch(e){}
+      }
+    };
+
+    function toggleSound() {
+      isSoundMuted = !isSoundMuted;
+      localStorage.setItem('gcvt_sound_muted', isSoundMuted ? 'true' : 'false');
+      document.getElementById('iconSoundOn').style.display = isSoundMuted ? 'none' : 'block';
+      document.getElementById('iconSoundOff').style.display = isSoundMuted ? 'block' : 'none';
+    }
+
+    // 3. PARSER TIẾNG VIỆT UNICODE NFC & TÁCH THẺ
+    const LEADING_PUNCT = /^([“"'(«\[]+)/;
+    const TRAILING_PUNCT = /([.,!?;:…”"')»\]]+)$/;
+
+    function extractPunctuation(rawText) {
+      const normalized = (rawText || '').normalize('NFC').trim();
+      let word = normalized;
+      let leading = '';
+      let trailing = '';
+      const leadMatch = word.match(LEADING_PUNCT);
+      if (leadMatch) {
+        leading = leadMatch[1];
+        word = word.slice(leading.length);
+      }
+      const trailMatch = word.match(TRAILING_PUNCT);
+      if (trailMatch) {
+        trailing = trailMatch[1];
+        word = word.slice(0, word.length - trailing.length);
+      }
+      if (!word && (leading || trailing)) {
+        word = leading + trailing;
+        leading = '';
+        trailing = '';
+      }
+      return { raw: normalized, word, leading, trailing };
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // 4. TRẠNG THÁI TOÀN CỤC CỦA GAME (GLOBAL STATE)
+    let currentPoem = null;
+    let currentGameMode = 'rescue';
+    let rounds = [];
+    let currentRoundIndex = 0;
+    let placedTokensMap = {}; // slotId -> token | null
+    let trayTokens = []; // Array of tokens in tray
+    let selectedCard = null; // { token, fromSlotId }
+    let slotValidationMap = {}; // slotId -> 'correct' | 'wrong' | null
+    let hintLevel = 0;
+    let rhymeSlotIds = new Set();
+    let historyStack = [];
+    let timeRemaining = 0;
+    let timerInterval = null;
+    let isTimerRunning = false;
+    let hintDeductions = 0;
+
+    // Khởi tạo bài thơ
+    function getStoredPoems() {
+      try {
+        const data = localStorage.getItem('gcvt_saved_poems_v1');
+        if (data) {
+          const parsed = JSON.parse(data);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch(e){}
+      localStorage.setItem('gcvt_saved_poems_v1', JSON.stringify(SAMPLE_POEMS));
+      return SAMPLE_POEMS;
+    }
+
+    function saveStoredPoems(poems) {
+      localStorage.setItem('gcvt_saved_poems_v1', JSON.stringify(poems));
+    }
+
+    function parsePoemIntoRounds(poem) {
+      const text = (poem.content || '').normalize('NFC').trim();
+      const rawLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      
+      const lineChunks = [];
+      if (!poem.autoSplitRounds || rawLines.length <= 4) {
+        lineChunks.push(rawLines);
+      } else {
+        // Chunk into pairs of 2-3 lines
+        for (let i = 0; i < rawLines.length; i += 2) {
+          lineChunks.push(rawLines.slice(i, i + 2));
+        }
+      }
+
+      let globalLineIdx = 0;
+      const parsedRounds = [];
+
+      lineChunks.forEach((chunk, rIdx) => {
+        const lines = [];
+        const roundTokens = [];
+
+        chunk.forEach(lineStr => {
+          let units = [];
+          if (poem.splitMode === 'phrase' && lineStr.includes('|')) {
+            units = lineStr.split('|').map(p => extractPunctuation(p.trim())).filter(u => u.word.length > 0);
+          } else {
+            units = lineStr.split(/\s+/).map(w => extractPunctuation(w.trim())).filter(u => u.word.length > 0);
+          }
+
+          const slots = [];
+          units.forEach((u, slotIdx) => {
+            const tokenId = `tok-${globalLineIdx}-${slotIdx}-${Math.random().toString(36).substr(2, 5)}`;
+            const slotId = `slot-${globalLineIdx}-${slotIdx}`;
+            const token = {
+              id: tokenId,
+              text: u.word,
+              cleanText: u.word.toLowerCase().normalize('NFC'),
+              leading: u.leading,
+              trailing: u.trailing,
+              lineIndex: globalLineIdx,
+              slotIndex: slotIdx,
+              isFixed: false
+            };
+            const slot = {
+              id: slotId,
+              lineIndex: globalLineIdx,
+              slotIndex: slotIdx,
+              expectedText: token.cleanText,
+              originalToken: token,
+              currentPlacedToken: null
+            };
+            roundTokens.push(token);
+            slots.push(slot);
+          });
+
+          lines.push({ lineIndex: globalLineIdx, text: lineStr, slots });
+          globalLineIdx++;
+        });
+
+        // Độ khó: Dễ (30% xáo trộn, 70% cố định), Vừa (60% xáo trộn, 40% cố định), Khó (100% xáo trộn)
+        let fixRatio = 0;
+        if (poem.difficulty === 'easy') fixRatio = 0.7;
+        else if (poem.difficulty === 'medium') fixRatio = 0.4;
+        else fixRatio = 0;
+
+        const numToFix = Math.floor(roundTokens.length * fixRatio);
+        const avail = roundTokens.map((_, i) => i);
+        const shuffledAvail = shuffleArray(avail);
+        const fixedSet = new Set(shuffledAvail.slice(0, numToFix));
+
+        const tray = [];
+        roundTokens.forEach((tok, idx) => {
+          if (fixedSet.has(idx)) {
+            tok.isFixed = true;
+            for (const l of lines) {
+              const s = l.slots.find(sl => sl.lineIndex === tok.lineIndex && sl.slotIndex === tok.slotIndex);
+              if (s) {
+                s.currentPlacedToken = tok;
+                break;
+              }
+            }
+          } else {
+            tok.isFixed = false;
+            tray.push(tok);
+          }
+        });
+
+        parsedRounds.push({
+          roundIndex: rIdx,
+          totalRounds: lineChunks.length,
+          title: lineChunks.length > 1 ? `Khổ thơ ${rIdx + 1}` : 'Toàn bài thơ',
+          lines,
+          scrambledTokens: shuffleArray(tray),
+          fullText: chunk.join('\n')
+        });
+      });
+
+      return parsedRounds;
+    }
+
+    function startPoem(poem) {
+      currentPoem = poem;
+      rounds = parsePoemIntoRounds(poem);
+      currentRoundIndex = 0;
+      hintDeductions = 0;
+
+      if (currentGameMode === 'rescue') {
+        loadRound(0, false);
+      } else if (currentGameMode === 'spot-impostor') {
+        initImpostorGame();
+      } else if (currentGameMode === 'sort-lines') {
+        initSortLinesGame();
+      } else if (currentGameMode === 'ink-fader') {
+        initInkFaderGame();
+      }
+    }
+
+    function loadRound(rIdx, playWind) {
+      currentRoundIndex = rIdx;
+      const round = rounds[rIdx];
+      if (!round) return;
+
+      placedTokensMap = {};
+      for (const line of round.lines) {
+        for (const slot of line.slots) {
+          placedTokensMap[slot.id] = slot.currentPlacedToken || null;
+        }
+      }
+      trayTokens = [...round.scrambledTokens];
+      selectedCard = null;
+      slotValidationMap = {};
+      hintLevel = 0;
+      rhymeSlotIds = new Set();
+      historyStack = [];
+
+      // Timer
+      if (timerInterval) clearInterval(timerInterval);
+      timeRemaining = currentPoem.timeLimit || 0;
+      isTimerRunning = timeRemaining > 0;
+      const timerPill = document.getElementById('timerPill');
+      if (timeRemaining > 0) {
+        timerPill.style.display = 'inline-flex';
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+          if (!isTimerRunning) return;
+          timeRemaining--;
+          updateTimerDisplay();
+          if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            sound.wrong();
+          }
+        }, 1000);
+      } else {
+        timerPill.style.display = 'none';
+      }
+
+      // UI
+      document.getElementById('poemTitleDisplay').textContent = currentPoem.title;
+      document.getElementById('poemMetaDisplay').textContent = `${currentPoem.author || 'Tác giả dân gian'}${currentPoem.grade ? ' · ' + currentPoem.grade : ''}`;
+      document.getElementById('roundBadge').textContent = `Khổ ${rIdx + 1} / ${round.totalRounds}`;
+      document.getElementById('txtHint').textContent = 'Gợi ý';
+
+      renderPoemLines();
+      renderWordTray();
+      updateUndoState();
+
+      if (playWind) {
+        triggerWindAnimation();
+      }
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      const timerText = document.getElementById('timerText');
+      timerText.textContent = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      const pill = document.getElementById('timerPill');
+      if (timeRemaining <= 15 && timeRemaining > 0) {
+        pill.classList.add('timer-urgent');
+      } else {
+        pill.classList.remove('timer-urgent');
+      }
+    }
+
+    function toggleTimer() {
+      if (currentPoem.timeLimit <= 0) return;
+      isTimerRunning = !isTimerRunning;
+    }
+
+    // 5. RENDERING TRANG THƠ & CÁC Ô CHỮ
+    function renderPoemLines() {
+      const container = document.getElementById('poemLinesContainer');
+      container.innerHTML = '';
+      const round = rounds[currentRoundIndex];
+      if (!round) return;
+
+      round.lines.forEach(line => {
+        const lineRow = document.createElement('div');
+        lineRow.className = 'poem-line-row';
+
+        // Check if all slots in line are correct
+        const allCorrect = line.slots.every(s => slotValidationMap[s.id] === 'correct');
+        if (allCorrect) lineRow.classList.add('line-correct');
+
+        const lineNum = document.createElement('span');
+        lineNum.className = 'line-number-badge';
+        lineNum.textContent = line.lineIndex + 1;
+        lineRow.appendChild(lineNum);
+
+        const slotsWrapper = document.createElement('div');
+        slotsWrapper.className = 'line-slots-wrapper';
+
+        line.slots.forEach(slot => {
+          const slotEl = document.createElement('div');
+          slotEl.className = 'poem-slot';
+          slotEl.id = slot.id;
+
+          const placedToken = placedTokensMap[slot.id];
+          const valStatus = slotValidationMap[slot.id];
+
+          if (valStatus === 'correct') slotEl.classList.add('slot-correct');
+          if (valStatus === 'wrong') slotEl.classList.add('slot-wrong');
+          if (rhymeSlotIds.has(slot.id)) slotEl.classList.add('slot-rhyme-glow');
+
+          // If a card is selected in hand and slot is empty
+          if (selectedCard && !placedToken) {
+            slotEl.classList.add('slot-selected-target');
+          }
+
+          // Slot Drag & Drop Events
+          slotEl.ondragover = (e) => {
+            e.preventDefault();
+            slotEl.classList.add('slot-dragover');
+          };
+          slotEl.ondragleave = () => slotEl.classList.remove('slot-dragover');
+          slotEl.ondrop = (e) => handleSlotDrop(e, slot.id);
+
+          // Slot Click Event (Dual-input: click-to-place)
+          slotEl.onclick = (e) => handleSlotClick(e, slot.id);
+
+          if (placedToken) {
+            const cardEl = createWordCardElement(placedToken, slot.id, valStatus);
+            slotEl.appendChild(cardEl);
+          } else {
+            // Empty placeholder or Hint letter
+            if (hintLevel >= 1 && slot.originalToken.text) {
+              const hintSpan = document.createElement('span');
+              hintSpan.className = 'slot-hint-letter';
+              hintSpan.textContent = slot.originalToken.text[0];
+              slotEl.appendChild(hintSpan);
+            } else {
+              const emptySpan = document.createElement('span');
+              emptySpan.className = 'slot-empty-placeholder';
+              emptySpan.textContent = slot.slotIndex + 1;
+              slotEl.appendChild(emptySpan);
+            }
+          }
+
+          slotsWrapper.appendChild(slotEl);
+        });
+
+        lineRow.appendChild(slotsWrapper);
+        container.appendChild(lineRow);
+      });
+    }
+
+    // 6. RENDERING KHO TỪ THẤT LẠC (WORD TRAY)
+    function renderWordTray() {
+      const container = document.getElementById('wordTrayCards');
+      container.innerHTML = '';
+
+      document.getElementById('trayCountBadge').textContent = 
+        trayTokens.length > 0 ? `Còn ${trayTokens.length} từ cần giải cứu` : 'Đã xếp hết thẻ!';
+
+      const actionNotice = document.getElementById('trayActionNotice');
+      if (selectedCard && selectedCard.fromSlotId) {
+        actionNotice.style.display = 'inline-flex';
+      } else {
+        actionNotice.style.display = 'none';
+      }
+
+      if (trayTokens.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 12px 0;">
+            <p style="font-weight: 600; color: var(--color-emerald-dark); margin-bottom: 4px;">
+              Toàn bộ con chữ đã bay về bài thơ!
+            </p>
+            <p style="font-size: 0.9rem; color: var(--color-ink-light);">
+              Hãy bấm nút <strong>Kiểm tra bài</strong> để đối chiếu kết quả nhé.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      trayTokens.forEach(token => {
+        const cardEl = createWordCardElement(token, null, null);
+        container.appendChild(cardEl);
+      });
+    }
+
+    function createWordCardElement(token, fromSlotId, valStatus) {
+      const card = document.createElement('div');
+      card.className = 'word-card';
+      if (token.isFixed) card.classList.add('card-fixed');
+      if (fromSlotId) card.classList.add('card-in-slot');
+      if (valStatus === 'correct') card.classList.add('card-correct');
+      if (valStatus === 'wrong') card.classList.add('card-wrong');
+
+      if (selectedCard && selectedCard.token.id === token.id && selectedCard.fromSlotId === fromSlotId) {
+        card.classList.add('card-selected');
+      }
+
+      card.draggable = !token.isFixed;
+      card.ondragstart = (e) => {
+        if (token.isFixed) { e.preventDefault(); return; }
+        sound.pick();
+        e.dataTransfer.setData('text/plain', JSON.stringify({ token, fromSlotId }));
+      };
+
+      card.onclick = (e) => {
+        e.stopPropagation();
+        if (token.isFixed) return;
+        sound.pick();
+        handleCardSelect(token, fromSlotId);
+      };
+
+      let inner = '';
+      if (token.leading) inner += `<span style="opacity: 0.7;">${token.leading}</span>`;
+      inner += `<span>${token.text}</span>`;
+      if (token.trailing) inner += `<span style="opacity: 0.7;">${token.trailing}</span>`;
+
+      if (token.isFixed) {
+        inner += `<span style="margin-left: 6px; opacity: 0.6; font-size: 11px;">🔒</span>`;
+      }
+      if (valStatus === 'correct') {
+        inner += `<span class="card-status-icon correct">✓</span>`;
+      }
+      if (valStatus === 'wrong') {
+        inner += `<span class="card-status-icon wrong">!</span>`;
+      }
+
+      card.innerHTML = inner;
+      return card;
+    }
+
+    // 7. TƯƠNG TÁC KÉO THẢ & CHẠM CHỌN (DUAL-INPUT SYSTEM)
+    function pushHistory() {
+      historyStack.push({
+        placedTokensMap: { ...placedTokensMap },
+        trayTokens: [...trayTokens]
+      });
+      updateUndoState();
+    }
+
+    function updateUndoState() {
+      const btn = document.getElementById('btnUndo');
+      if (historyStack.length > 0) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      }
+    }
+
+    function handleCardSelect(token, fromSlotId) {
+      if (selectedCard && selectedCard.token.id === token.id && selectedCard.fromSlotId === fromSlotId) {
+        selectedCard = null; // Bỏ chọn
+      } else {
+        selectedCard = { token, fromSlotId };
+      }
+      renderPoemLines();
+      renderWordTray();
+    }
+
+    function handleSlotClick(e, targetSlotId) {
+      if (selectedCard) {
+        sound.snap();
+        placeTokenIntoSlot(targetSlotId, selectedCard.token, selectedCard.fromSlotId);
+      }
+    }
+
+    function handleSlotDrop(e, targetSlotId) {
+      e.preventDefault();
+      const slotEl = document.getElementById(targetSlotId);
+      if (slotEl) slotEl.classList.remove('slot-dragover');
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (data && data.token) {
+          sound.snap();
+          placeTokenIntoSlot(targetSlotId, data.token, data.fromSlotId);
+        }
+      } catch(err){}
+    }
+
+    function placeTokenIntoSlot(targetSlotId, tokenToPlace, fromSlotId) {
+      pushHistory();
+      const currentAtTarget = placedTokensMap[targetSlotId] || null;
+
+      if (fromSlotId === null) {
+        // Kéo/chọn từ khay vào ô
+        if (currentAtTarget) {
+          trayTokens.push(currentAtTarget);
+        }
+        placedTokensMap[targetSlotId] = tokenToPlace;
+        trayTokens = trayTokens.filter(t => t.id !== tokenToPlace.id);
+      } else {
+        // Chuyển giữa 2 ô (hoán đổi)
+        if (fromSlotId === targetSlotId) {
+          selectedCard = null;
+          renderPoemLines();
+          return;
+        }
+        if (currentAtTarget) {
+          placedTokensMap[targetSlotId] = tokenToPlace;
+          placedTokensMap[fromSlotId] = currentAtTarget;
+        } else {
+          placedTokensMap[targetSlotId] = tokenToPlace;
+          placedTokensMap[fromSlotId] = null;
+        }
+      }
+
+      selectedCard = null;
+      slotValidationMap = {}; // Xóa dấu kiểm tra cũ khi di chuyển
+      renderPoemLines();
+      renderWordTray();
+    }
+
+    // Trả thẻ về kho khi kéo hoặc click vào khay
+    function handleTrayDragOver(e) {
+      e.preventDefault();
+    }
+    function handleTrayDragLeave(e) {}
+    function handleTrayDrop(e) {
+      e.preventDefault();
+      try {
+        const raw = e.dataTransfer.getData('text/plain');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (data && data.fromSlotId) {
+          sound.snap();
+          returnTokenToTray(data.token, data.fromSlotId);
+        }
+      } catch(err){}
+    }
+    function handleTrayClick() {
+      if (selectedCard && selectedCard.fromSlotId) {
+        sound.snap();
+        returnTokenToTray(selectedCard.token, selectedCard.fromSlotId);
+      }
+    }
+    function returnTokenToTray(token, fromSlotId) {
+      pushHistory();
+      placedTokensMap[fromSlotId] = null;
+      trayTokens.push(token);
+      selectedCard = null;
+      slotValidationMap = {};
+      renderPoemLines();
+      renderWordTray();
+    }
+
+    // 8. CÁC NÚT ĐIỀU KHIỂN SƯ PHẠM
+    function handleUndo() {
+      if (historyStack.length === 0) return;
+      const prev = historyStack.pop();
+      placedTokensMap = prev.placedTokensMap;
+      trayTokens = prev.trayTokens;
+      selectedCard = null;
+      slotValidationMap = {};
+      updateUndoState();
+      renderPoemLines();
+      renderWordTray();
+      sound.snap();
+    }
+
+    function handleResetRound() {
+      pushHistory();
+      const round = rounds[currentRoundIndex];
+      const restored = [...trayTokens];
+      for (const line of round.lines) {
+        for (const slot of line.slots) {
+          const tok = placedTokensMap[slot.id];
+          if (tok && !tok.isFixed) {
+            restored.push(tok);
+            placedTokensMap[slot.id] = null;
+          }
+        }
+      }
+      trayTokens = shuffleArray(restored);
+      selectedCard = null;
+      slotValidationMap = {};
+      renderPoemLines();
+      renderWordTray();
+      sound.snap();
+    }
+
+    function handleBlowWind() {
+      sound.wind();
+      triggerWindAnimation();
+      handleResetRound();
+    }
+
+    function handleCheck() {
+      const round = rounds[currentRoundIndex];
+      let isAllCorrect = true;
+      let totalSlots = 0;
+      let correctSlots = 0;
+
+      round.lines.forEach(line => {
+        let lineCorrect = true;
+        line.slots.forEach(slot => {
+          totalSlots++;
+          const placed = placedTokensMap[slot.id];
+          if (!placed) {
+            slotValidationMap[slot.id] = 'wrong';
+            isAllCorrect = false;
+            lineCorrect = false;
+          } else {
+            // Xử lý từ trùng lặp: chỉ cần khớp chữ normalized
+            if (placed.cleanText === slot.expectedText) {
+              slotValidationMap[slot.id] = 'correct';
+              correctSlots++;
+            } else {
+              slotValidationMap[slot.id] = 'wrong';
+              isAllCorrect = false;
+              lineCorrect = false;
+            }
+          }
+        });
+      });
+
+      renderPoemLines();
+
+      if (isAllCorrect) {
+        sound.correct();
+        if (timerInterval) clearInterval(timerInterval);
+        setTimeout(() => {
+          openCompletionModal();
+        }, 500);
+      } else {
+        if (correctSlots > 0) sound.correct();
+        else sound.wrong();
+      }
+    }
+
+    function handleHint() {
+      sound.pick();
+      const round = rounds[currentRoundIndex];
+
+      if (hintLevel === 0) {
+        hintLevel = 1;
+        document.getElementById('txtHint').textContent = 'Gợi ý (Cấp 1)';
+        renderPoemLines();
+      } else if (hintLevel === 1) {
+        hintLevel = 2;
+        document.getElementById('txtHint').textContent = 'Gợi ý (Cấp 2)';
+        // Hiển thị liên kết vần (ví dụ lục bát tiếng thứ 6 câu 6 với tiếng thứ 6 câu 8)
+        rhymeSlotIds.clear();
+        if (round.lines.length >= 2) {
+          const l0 = round.lines[0];
+          const l1 = round.lines[1];
+          if (l0.slots.length >= 6 && l1.slots.length >= 6) {
+            rhymeSlotIds.add(l0.slots[5].id);
+            rhymeSlotIds.add(l1.slots[5].id);
+          }
+        }
+        renderPoemLines();
+      } else {
+        hintLevel = 3;
+        document.getElementById('txtHint').textContent = 'Gợi ý (Cấp 3)';
+        // Tự động giải cứu 1 từ
+        let emptySlot = null;
+        for (const line of round.lines) {
+          for (const s of line.slots) {
+            if (!placedTokensMap[s.id]) {
+              emptySlot = s;
+              break;
+            }
+          }
+          if (emptySlot) break;
+        }
+
+        if (emptySlot) {
+          const match = trayTokens.find(t => t.cleanText === emptySlot.expectedText);
+          if (match) {
+            placeTokenIntoSlot(emptySlot.id, match, null);
+            hintDeductions += 10;
+          }
+        }
+      }
+    }
+
+    // 9. ANIMATION CƠN GIÓ (WIND GUST) VÀ PHÁO HOA (CONFETTI)
+    function triggerWindAnimation() {
+      const canvas = document.getElementById('windCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#D5A85F', '#E5B869', '#377F78', '#F7EFD9', '#C3423F'];
+      for (let i = 0; i < 40; i++) {
+        particles.push({
+          x: Math.random() * (canvas.width * 0.4),
+          y: Math.random() * canvas.height,
+          vx: 8 + Math.random() * 12,
+          vy: -2 + Math.random() * 5,
+          size: 8 + Math.random() * 14,
+          rot: Math.random() * Math.PI * 2,
+          vRot: (Math.random() - 0.5) * 0.2,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+
+      let start = null;
+      const duration = 1200;
+      function step(now) {
+        if (!start) start = now;
+        const elapsed = now - start;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vRot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.size, p.size * 0.45, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        if (elapsed < duration) {
+          requestAnimationFrame(step);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#377F78', '#D5A85F', '#E5B869', '#2A8754', '#E65100'];
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+          y: canvas.height * 0.6,
+          vx: (Math.random() - 0.5) * 16,
+          vy: -8 - Math.random() * 14,
+          size: 6 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1
+        });
+      }
+
+      let start = null;
+      function step(now) {
+        if (!start) start = now;
+        const elapsed = now - start;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // trọng lực
+          p.alpha -= 0.007;
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+          ctx.restore();
+        });
+
+        if (elapsed < 2000) {
+          requestAnimationFrame(step);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // 10. MÀN HÌNH HOÀN THÀNH & ĐỌC HIỂU
+    function openCompletionModal() {
+      sound.fanfare();
+      triggerConfetti();
+
+      const round = rounds[currentRoundIndex];
+      const isFinished = currentRoundIndex + 1 >= rounds.length;
+      const placementScore = 80;
+      const timeBonus = (currentPoem.timeLimit > 0 && timeRemaining > 0) ? 10 : 5;
+      const compScore = 10;
+      const totalScore = Math.max(0, placementScore + timeBonus + compScore - hintDeductions);
+
+      const html = `
+        <div class="modal-overlay">
+          <div class="modal-card" style="max-width: 720px;">
+            <div class="modal-header">
+              <h3 style="color: var(--color-emerald-dark); margin:0;">
+                ${isFinished ? '🎉 CHÚC MỪNG ĐÃ GIẢI CỨU THÀNH CÔNG!' : '✨ HOÀN THÀNH KHỔ THƠ!'}
+              </h3>
+              <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+              <!-- Score Summary -->
+              <div style="background: linear-gradient(135deg, #F9F5EC 0%, #F4EADB 100%); border: 2px solid #E4D5B2; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <div>
+                  <span style="font-size: 0.88rem; color: var(--color-ink-light);">Tổng điểm xếp hạng</span>
+                  <div style="font-size: 2.2rem; font-weight: 800; color: var(--color-emerald-dark); line-height: 1;">
+                    ${totalScore} <span style="font-size: 1.1rem; font-weight: 500; color: #888;">/ 100</span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 14px; font-size: 0.88rem;">
+                  <div>Khôi phục: <strong style="color:var(--color-correct)">+${placementScore}đ</strong></div>
+                  <div>Thời gian: <strong style="color:var(--color-amber-dark)">+${timeBonus}đ</strong></div>
+                  <div>Đọc hiểu: <strong style="color:var(--color-emerald)">+${compScore}đ</strong></div>
+                  ${hintDeductions > 0 ? `<div>Gợi ý: <strong style="color:var(--color-ruby)">-${hintDeductions}đ</strong></div>` : ''}
+                </div>
+              </div>
+
+              <!-- Full Poem View -->
+              <div style="background: #FFF; border: 1.5px solid #E1D3B0; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px;">
+                <h4 style="font-size: 1.3rem; color: var(--color-emerald-dark); margin-bottom: 4px;">${currentPoem.title}</h4>
+                <p style="font-style: italic; color: var(--color-ink-light); margin-bottom: 14px;">— ${currentPoem.author || 'Tác giả dân gian'} —</p>
+                <div style="font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.8; color: var(--color-ink); white-space: pre-line;">
+                  ${round.fullText}
+                </div>
+              </div>
+
+              <!-- Reading Comprehension -->
+              <div style="background: var(--bg-parchment-light); border: 1.5px solid #DECFA9; border-radius: 16px; padding: 18px 22px;">
+                <strong style="color: var(--color-ink); display:block; margin-bottom: 6px;">
+                  Gợi mở đọc hiểu & Cảm thụ văn học:
+                </strong>
+                <p style="font-size: 1.05rem; font-weight: 600; color: var(--color-emerald-dark); margin-bottom: 12px;">
+                  ${currentPoem.comprehensionQuestion || 'Hình ảnh hoặc từ ngữ nào trong đoạn thơ khiến em ấn tượng nhất? Vì sao?'}
+                </p>
+                <textarea class="form-textarea" placeholder="Học sinh hoặc đại diện nhóm chia sẻ cảm nghĩ..." style="min-height: 65px; margin-bottom: 10px;"></textarea>
+                ${currentPoem.comprehensionGuidance ? `
+                  <details style="font-size: 0.88rem; color: var(--color-ink-light); cursor: pointer;">
+                    <summary style="font-weight: 600; color: var(--color-emerald);">Xem định hướng câu trả lời của giáo viên</summary>
+                    <p style="margin-top: 6px; padding: 8px 12px; background: #FFF; border-radius: 8px; border: 1px solid #D5C29B;">
+                      ${currentPoem.comprehensionGuidance}
+                    </p>
+                  </details>
+                ` : ''}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+              <button class="btn btn-secondary" onclick="handleResetRound(); closeModal();">Chơi lại</button>
+              ${!isFinished ? `
+                <button class="btn btn-primary" onclick="closeModal(); loadRound(${currentRoundIndex + 1}, true);">
+                  Sang khổ tiếp theo ➔
+                </button>
+              ` : `
+                <button class="btn btn-amber" onclick="closeModal()">Tuyệt vời</button>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalContainer').innerHTML = html;
+    }
+
+    // 11. HỘP THOẠI XÁC NHẬN HIỆN ĐÁP ÁN (TEACHER OVERRIDE)
+    function openConfirmSolution() {
+      const html = `
+        <div class="modal-overlay">
+          <div class="modal-card" style="max-width: 460px;">
+            <div class="modal-header">
+              <h4 style="margin:0; color: var(--color-ink);">Xác nhận mở đáp án</h4>
+              <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+              <p style="line-height: 1.6; color: var(--color-ink);">
+                Thầy/Cô có muốn mở toàn bộ đáp án của bài thơ này cho học sinh không? Hệ thống sẽ khôi phục trọn vẹn các thẻ chữ vào trang thơ.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeModal()">Trở lại chơi</button>
+              <button class="btn btn-amber" onclick="applySolution()">Hiện đáp án</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalContainer').innerHTML = html;
+    }
+
+    function applySolution() {
+      closeModal();
+      const round = rounds[currentRoundIndex];
+      for (const line of round.lines) {
+        for (const slot of line.slots) {
+          placedTokensMap[slot.id] = slot.originalToken;
+          slotValidationMap[slot.id] = 'correct';
+        }
+      }
+      trayTokens = [];
+      selectedCard = null;
+      if (timerInterval) clearInterval(timerInterval);
+      renderPoemLines();
+      renderWordTray();
+      setTimeout(openCompletionModal, 500);
+    }
+
+    // 12. THƯ VIỆN BÀI THƠ (LIBRARY MODAL)
+    function openLibraryModal() {
+      const poems = getStoredPoems();
+      let listHtml = '';
+      poems.forEach(p => {
+        listHtml += `
+          <div style="background: #FFF; border: 1.5px solid #E4D5B2; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div>
+              <h4 style="font-size: 1.15rem; color: var(--color-emerald-dark); margin-bottom: 4px;">${p.title}</h4>
+              <p style="font-size: 0.88rem; color: var(--color-ink-light); margin:0;">Tác giả: <strong>${p.author || 'Chưa rõ'}</strong>${p.grade ? ' · ' + p.grade : ''}</p>
+            </div>
+            <div style="display:flex; gap: 8px;">
+              <button class="btn btn-secondary" onclick="editPoemInLibrary('${p.id}')">Sửa</button>
+              <button class="btn btn-primary" onclick="selectPoemFromLibrary('${p.id}')">Chơi ngay</button>
+            </div>
+          </div>
+        `;
+      });
+
+      const html = `
+        <div class="modal-overlay">
+          <div class="modal-card" style="max-width: 760px;">
+            <div class="modal-header">
+              <h3 style="margin:0; color: var(--color-emerald-dark);">Thư viện bài thơ</h3>
+              <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                <button class="btn btn-primary" onclick="closeModal(); openTeacherEditor();">+ Tạo bài mới</button>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-secondary" onclick="exportDataJSON()">Xuất JSON</button>
+                  <button class="btn btn-secondary" onclick="resetDefaultSamples()">Mẫu chuẩn</button>
+                </div>
+              </div>
+              <div>${listHtml}</div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalContainer').innerHTML = html;
+    }
+
+    function selectPoemFromLibrary(id) {
+      const poems = getStoredPoems();
+      const p = poems.find(x => x.id === id);
+      if (p) {
+        closeModal();
+        startPoem(p);
+      }
+    }
+
+    function resetDefaultSamples() {
+      if (confirm('Khôi phục danh sách các bài thơ mẫu chuẩn Ngữ văn?')) {
+        saveStoredPoems(SAMPLE_POEMS);
+        openLibraryModal();
+      }
+    }
+
+    function exportDataJSON() {
+      const poems = getStoredPoems();
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(poems, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = `giai-cuu-van-tho-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+    }
+
+    // 13. TRÌNH SOẠN BÀI THƠ DÀNH CHO GIÁO VIÊN
+    function openTeacherEditor(editPoem = null) {
+      const p = editPoem || {
+        title: '',
+        author: '',
+        grade: 'Lớp 6 – Kết nối tri thức',
+        content: '',
+        splitMode: 'syllable',
+        difficulty: 'medium',
+        timeLimit: 60,
+        comprehensionQuestion: 'Hình ảnh hoặc từ ngữ nào trong đoạn thơ khiến em ấn tượng nhất? Vì sao?',
+        comprehensionGuidance: ''
+      };
+
+      const html = `
+        <div class="modal-overlay">
+          <div class="modal-card" style="max-width: 800px;">
+            <div class="modal-header">
+              <h3 style="margin:0; color: var(--color-emerald-dark);">
+                ${editPoem ? 'Chỉnh sửa bài thơ' : 'Tạo màn chơi bài thơ mới'}
+              </h3>
+              <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                <div class="form-group">
+                  <label class="form-label">Tên bài thơ *</label>
+                  <input type="text" id="edTitle" class="form-input" value="${p.title}" placeholder="VD: Trang thơ sân trường">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tác giả</label>
+                  <input type="text" id="edAuthor" class="form-input" value="${p.author}" placeholder="VD: Lâm Thị Mỹ Dạ">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Khối lớp / Bộ sách</label>
+                  <input type="text" id="edGrade" class="form-input" value="${p.grade}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Nội dung câu thơ * (Cách một dòng trống để ngắt khổ)</label>
+                <textarea id="edContent" class="form-textarea" placeholder="Nhập từng dòng câu thơ tại đây...">${p.content}</textarea>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: var(--bg-parchment-light); padding: 14px; border-radius: 12px; margin-bottom: 14px;">
+                <div>
+                  <label class="form-label" style="font-size:0.85rem">Tách thẻ</label>
+                  <select id="edSplit" class="form-select">
+                    <option value="syllable" ${p.splitMode === 'syllable' ? 'selected' : ''}>Từng tiếng (Mặc định)</option>
+                    <option value="phrase" ${p.splitMode === 'phrase' ? 'selected' : ''}>Cụm từ (dấu |)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" style="font-size:0.85rem">Độ khó</label>
+                  <select id="edDifficulty" class="form-select">
+                    <option value="easy" ${p.difficulty === 'easy' ? 'selected' : ''}>Dễ (30% ẩn)</option>
+                    <option value="medium" ${p.difficulty === 'medium' ? 'selected' : ''}>Vừa (60% ẩn)</option>
+                    <option value="hard" ${p.difficulty === 'hard' ? 'selected' : ''}>Khó (100% ẩn)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" style="font-size:0.85rem">Thời gian</label>
+                  <select id="edTime" class="form-select">
+                    <option value="0" ${p.timeLimit === 0 ? 'selected' : ''}>Không giới hạn</option>
+                    <option value="30" ${p.timeLimit === 30 ? 'selected' : ''}>30 giây</option>
+                    <option value="60" ${p.timeLimit === 60 ? 'selected' : ''}>60 giây (1 phút)</option>
+                    <option value="90" ${p.timeLimit === 90 ? 'selected' : ''}>90 giây</option>
+                    <option value="120" ${p.timeLimit === 120 ? 'selected' : ''}>120 giây</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Câu hỏi gợi mở đọc hiểu</label>
+                <input type="text" id="edQuestion" class="form-input" value="${p.comprehensionQuestion}">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Định hướng câu trả lời cho giáo viên</label>
+                <input type="text" id="edGuidance" class="form-input" value="${p.comprehensionGuidance}">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+              <button class="btn btn-primary" onclick="saveAndStartCustomPoem('${p.id || ''}')">Lưu & Chơi ngay</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalContainer').innerHTML = html;
+    }
+
+    function editPoemInLibrary(id) {
+      const poems = getStoredPoems();
+      const p = poems.find(x => x.id === id);
+      if (p) openTeacherEditor(p);
+    }
+
+    function saveAndStartCustomPoem(existingId) {
+      const title = document.getElementById('edTitle').value.trim();
+      const author = document.getElementById('edAuthor').value.trim();
+      const grade = document.getElementById('edGrade').value.trim();
+      const content = document.getElementById('edContent').value.trim();
+      const splitMode = document.getElementById('edSplit').value;
+      const difficulty = document.getElementById('edDifficulty').value;
+      const timeLimit = parseInt(document.getElementById('edTime').value, 10);
+      const question = document.getElementById('edQuestion').value.trim();
+      const guidance = document.getElementById('edGuidance').value.trim();
+
+      if (!title || !content) {
+        alert('Vui lòng nhập Tên bài thơ và Nội dung câu thơ!');
+        return;
+      }
+
+      const id = existingId || `poem-${Date.now()}`;
+      const poem = {
+        id,
+        title,
+        author,
+        grade,
+        content,
+        splitMode,
+        difficulty,
+        timeLimit,
+        checkMode: 'whole',
+        autoSplitRounds: true,
+        comprehensionQuestion: question,
+        comprehensionGuidance: guidance
+      };
+
+      const poems = getStoredPoems();
+      const idx = poems.findIndex(x => x.id === id);
+      if (idx >= 0) poems[idx] = poem;
+      else poems.unshift(poem);
+      saveStoredPoems(poems);
+
+      closeModal();
+      startPoem(poem);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // ĐIỀU PHỐI CÁC CHẾ ĐỘ TRÒ CHƠI (GAME MODE SWITCHER)
+    // ═══════════════════════════════════════════════════════════
+    const GAME_MODE_CONFIG = {
+      'rescue': {
+        btnId: 'btnModeRescue',
+        containerId: 'rescueModeContainer',
+        color: '#377F78',
+        bg: 'linear-gradient(135deg, #E6F3F1 0%, #D0EAE6 100%)'
+      },
+      'spot-impostor': {
+        btnId: 'btnModeSpotImpostor',
+        containerId: 'impostorModeContainer',
+        color: '#B83A3A',
+        bg: 'linear-gradient(135deg, #FDF0F0 0%, #FADDDD 100%)'
+      },
+      'sort-lines': {
+        btnId: 'btnModeSortLines',
+        containerId: 'sortLinesModeContainer',
+        color: '#6B4CB9',
+        bg: 'linear-gradient(135deg, #F0ECF9 0%, #E2D5F5 100%)'
+      },
+      'ink-fader': {
+        btnId: 'btnModeInkFader',
+        containerId: 'inkFaderModeContainer',
+        color: '#5C7A6E',
+        bg: 'linear-gradient(135deg, #EEF5F3 0%, #DFF0EC 100%)'
+      }
+    };
+
+    function switchGameMode(mode) {
+      currentGameMode = mode;
+      sound.snap();
+
+      Object.entries(GAME_MODE_CONFIG).forEach(([key, cfg]) => {
+        const btn = document.getElementById(cfg.btnId);
+        const container = document.getElementById(cfg.containerId);
+        if (btn) {
+          const title = btn.querySelector('.mode-card-title');
+          if (key === mode) {
+            btn.classList.add('mode-card-active');
+            btn.style.borderColor = cfg.color;
+            btn.style.background = cfg.bg;
+            if (title) title.style.color = cfg.color;
+          } else {
+            btn.classList.remove('mode-card-active');
+            btn.style.borderColor = '#E0D1AF';
+            btn.style.background = '#FFFFFF';
+            if (title) title.style.color = 'var(--color-ink)';
+          }
+        }
+        if (container) {
+          container.style.display = (key === mode) ? 'block' : 'none';
+        }
+      });
+
+      if (mode === 'rescue') {
+        if (!rounds || rounds.length === 0) {
+          rounds = parsePoemIntoRounds(currentPoem);
+        }
+        loadRound(currentRoundIndex || 0, false);
+      } else if (mode === 'spot-impostor') {
+        initImpostorGame();
+      } else if (mode === 'sort-lines') {
+        initSortLinesGame();
+      } else if (mode === 'ink-fader') {
+        initInkFaderGame();
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // CHẾ ĐỘ 2: THÁM TỬ BẮT LỖI (SPOT IMPOSTOR)
+    // ═══════════════════════════════════════════════════════════
+    const IMPOSTOR_SUBSTITUTE_POOL = {
+      'xanh': ['tươi', 'biếc', 'thắm'],
+      'trắng': ['bạch', 'ngần', 'tinh'],
+      'vàng': ['óng', 'rực', 'kim'],
+      'đen': ['tối', 'thâm', 'mực'],
+      'đỏ': ['thắm', 'rực', 'tươi'],
+      'hồng': ['tươi', 'thắm', 'đào'],
+      'tím': ['biếc', 'ngát', 'sẫm'],
+      'cao': ['rộng', 'dài', 'lớn'],
+      'sâu': ['thẳm', 'xa', 'rộng'],
+      'đẹp': ['xinh', 'tươi', 'duyên'],
+      'vui': ['mừng', 'tươi', 'hân hoan'],
+      'buồn': ['sầu', 'bi', 'u sầu'],
+      'ngày': ['hôm', 'lúc', 'khi'],
+      'đêm': ['tối', 'khuya', 'canh'],
+      'trời': ['bầu', 'mây', 'gió'],
+      'mây': ['gió', 'sương', 'khói'],
+      'nước': ['sông', 'biển', 'suối'],
+      'núi': ['đồi', 'rừng', 'gò'],
+      'cây': ['cành', 'lá', 'hoa'],
+      'hoa': ['bông', 'nụ', 'cánh'],
+      'lá': ['cành', 'ngọn', 'nhành'],
+      'gió': ['mây', 'hương', 'sóng'],
+      'mưa': ['sương', 'hơi', 'nước'],
+      'nắng': ['ánh', 'sáng', 'rực'],
+      'sáng': ['rạng', 'hừng', 'bừng'],
+      'chiều': ['xế', 'hoàng', 'tối'],
+      'xuân': ['hè', 'thu', 'đông'],
+      'thu': ['xuân', 'hè', 'đông'],
+      'quê': ['làng', 'xứ', 'miền'],
+      'nhà': ['mái', 'hiên', 'căn'],
+      'mẹ': ['cha', 'bà', 'má'],
+      'cha': ['bố', 'ba', 'thầy'],
+      'em': ['anh', 'con', 'bé'],
+      'anh': ['chị', 'bạn', 'người'],
+      'lòng': ['tim', 'dạ', 'tâm'],
+      'tim': ['lòng', 'tâm', 'bụng'],
+      'nhớ': ['thương', 'yêu', 'mong'],
+      'thương': ['nhớ', 'yêu', 'mến'],
+      'yêu': ['thương', 'mến', 'quý'],
+      'mong': ['đợi', 'chờ', 'ngóng'],
+      'chờ': ['đợi', 'mong', 'ngóng'],
+      'bay': ['lượn', 'vút', 'lao'],
+      'hát': ['ngân', 'ca', 'vang'],
+      'cười': ['mỉm', 'tươi', 'vui'],
+      'lặng': ['im', 'yên', 'tĩnh'],
+      'im': ['lặng', 'yên', 'bình'],
+      'xa': ['gần', 'cách', 'vắng'],
+      'gần': ['kề', 'bên', 'cạnh'],
+      'dài': ['rộng', 'thẳm', 'miên man'],
+      'tre': ['nứa', 'trúc', 'vầu'],
+      'bờ': ['mép', 'rìa', 'ven'],
+      'đất': ['đồng', 'ruộng', 'đồi'],
+      'sông': ['suối', 'kênh', 'ngòi'],
+      'biển': ['bể', 'đại dương', 'khơi'],
+      'sao': ['trăng', 'đèn', 'ánh'],
+      'trăng': ['sao', 'ánh', 'đèn'],
+      'đường': ['lối', 'nẻo', 'bước'],
+      'lối': ['ngõ', 'đường', 'nẻo'],
+      'ngõ': ['lối', 'xóm', 'đường'],
+      'thuyền': ['đò', 'bè', 'ghe'],
+      'đò': ['thuyền', 'bến', 'ghe'],
+      'bến': ['bờ', 'bãi', 'mép'],
+      'làng': ['xóm', 'thôn', 'quê'],
+      'thôn': ['xóm', 'làng', 'bản'],
+      'xóm': ['làng', 'thôn', 'ngõ'],
+      'trường': ['lớp', 'sân', 'phòng'],
+      'lớp': ['trường', 'bàn', 'phòng'],
+      'sách': ['vở', 'trang', 'tập'],
+      'vở': ['sách', 'trang', 'bài'],
+      'trang': ['dòng', 'tờ', 'khổ'],
+      'chữ': ['câu', 'lời', 'tiếng'],
+      'lời': ['câu', 'tiếng', 'ý'],
+      'tiếng': ['lời', 'giọng', 'âm'],
+      'thơ': ['văn', 'khúc', 'bài'],
+      'ca': ['hát', 'ngâm', 'khúc'],
+      'rơi': ['rụng', 'buông', 'bay'],
+      'rụng': ['rơi', 'tàn', 'buông'],
+      'trôi': ['chảy', 'lững', 'êm'],
+      'chảy': ['trôi', 'tuôn', 'reo'],
+      'reo': ['vang', 'vui', 'ngân'],
+      'ngát': ['thơm', 'nồng', 'dịu'],
+      'thơm': ['ngát', 'lừng', 'ngào'],
+      'ngọt': ['bùi', 'dịu', 'thơm'],
+      'bùi': ['ngọt', 'béo', 'bở'],
+      'đắng': ['chát', 'cay', 'gắt'],
+      'cay': ['nồng', 'đắng', 'gắt'],
+      'chim': ['én', 'khuyên', 'hạc'],
+      'én': ['chim', 'nhạn', 'hoạ'],
+      'lạnh': ['giá', 'buốt', 'căm'],
+      'ấm': ['nồng', 'êm', 'nóng'],
+      'êm': ['dịu', 'ru', 'nhẹ'],
+      'ru': ['êm', 'hát', 'vỗ'],
+      'con': ['cháu', 'bé', 'trẻ'],
+      'bạn': ['bè', 'người', 'thầy'],
+      'thầy': ['cô', 'cha', 'mẹ'],
+      'cô': ['thầy', 'bác', 'dì'],
+      'bước': ['đi', 'chân', 'tiến'],
+      'đi': ['bước', 'về', 'qua'],
+      'về': ['tới', 'đến', 'sang'],
+      'đến': ['tới', 'sang', 'về'],
+      'nhìn': ['ngắm', 'trông', 'xem'],
+      'ngắm': ['nhìn', 'trông', 'xem'],
+      'mở': ['khép', 'hé', 'giở'],
+      'lên': ['xuống', 'qua', 'sang'],
+      'xuống': ['lên', 'rơi', 'hạ'],
+      'đầy': ['vơi', 'tràn', 'nhiều'],
+      'vơi': ['đầy', 'cạn', 'ít'],
+      'nhiều': ['ít', 'đầy', 'muôn']
+    };
+
+    let impostorLines = [];
+    let impostorCount = 0;
+    let impostorChecked = false;
+    let impostorScore = null;
+    let impostorAttempts = 0;
+
+    function getImpostorSubstitute(word) {
+      const lower = word.toLowerCase();
+      if (IMPOSTOR_SUBSTITUTE_POOL[lower]) {
+        const opts = IMPOSTOR_SUBSTITUTE_POOL[lower];
+        const chosen = opts[Math.floor(Math.random() * opts.length)];
+        if (word[0] === word[0].toUpperCase() && word[0] !== word[0].toLowerCase()) {
+          return chosen.charAt(0).toUpperCase() + chosen.slice(1);
+        }
+        return chosen;
+      }
+      return null;
+    }
+
+    function buildImpostorData(poem) {
+      const rawLines = (poem.content || '')
+        .normalize('NFC')
+        .split(/\r?\n/)
+        .map(l => l.trim())
+        .filter(l => l.length > 0);
+
+      const targetImpostors = Math.min(Math.max(2, Math.floor(rawLines.length * 0.4)), 5);
+      const candidates = [];
+
+      rawLines.forEach((line, lIdx) => {
+        const words = line.split(/\s+/).filter(w => w.length > 0);
+        words.forEach((rawWord, wIdx) => {
+          const clean = rawWord.replace(/[.,!?;:"'()«»\[\]…—–]+/g, '');
+          const sub = getImpostorSubstitute(clean);
+          if (sub && clean.length > 1 && sub !== clean) {
+            candidates.push({ lineIdx: lIdx, wordIdx: wIdx, word: rawWord, sub });
+          }
+        });
+      });
+
+      if (candidates.length < targetImpostors) {
+        const fallbackPool = ['xanh', 'ngát', 'thơm', 'êm', 'tươi', 'nhớ', 'vui', 'sáng', 'ấm', 'mới'];
+        rawLines.forEach((line, lIdx) => {
+          const words = line.split(/\s+/).filter(w => w.length > 0);
+          words.forEach((rawWord, wIdx) => {
+            const clean = rawWord.replace(/[.,!?;:"'()«»\[\]…—–]+/g, '');
+            if (clean.length >= 3 && !candidates.some(c => c.lineIdx === lIdx && c.wordIdx === wIdx)) {
+              const sub = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+              if (sub !== clean.toLowerCase()) {
+                candidates.push({ lineIdx: lIdx, wordIdx: wIdx, word: rawWord, sub });
+              }
+            }
+          });
+        });
+      }
+
+      const shuffled = shuffleArray(candidates);
+      const chosen = shuffled.slice(0, targetImpostors);
+      const chosenSet = new Set(chosen.map(c => `${c.lineIdx}-${c.wordIdx}`));
+
+      const lines = rawLines.map((line, lIdx) => {
+        const words = line.split(/\s+/).filter(w => w.length > 0);
+        return words.map((rawWord, wIdx) => {
+          const key = `${lIdx}-${wIdx}`;
+          const chosenEntry = chosen.find(c => c.lineIdx === lIdx && c.wordIdx === wIdx);
+          if (chosenSet.has(key) && chosenEntry) {
+            return {
+              lineIndex: lIdx,
+              wordIndex: wIdx,
+              text: chosenEntry.sub,
+              isImpostor: true,
+              isSelected: false,
+              isRevealed: false,
+              originalWord: rawWord
+            };
+          }
+          return {
+            lineIndex: lIdx,
+            wordIndex: wIdx,
+            text: rawWord,
+            isImpostor: false,
+            isSelected: false,
+            isRevealed: false,
+            originalWord: rawWord
+          };
+        });
+      });
+
+      return { lines, count: chosen.length };
+    }
+
+    function initImpostorGame() {
+      const data = buildImpostorData(currentPoem);
+      impostorLines = data.lines;
+      impostorCount = data.count;
+      impostorChecked = false;
+      impostorScore = null;
+      renderImpostorGame();
+    }
+
+    function renderImpostorGame() {
+      const container = document.getElementById('impostorModeContainer');
+      if (!container) return;
+
+      const selectedCount = impostorLines.flat().filter(w => w.isSelected).length;
+
+      let html = `
+        <div class="impostor-game-container">
+          <div class="impostor-header">
+            <div class="impostor-header-left">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B83A3A" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <div>
+                <h2 class="impostor-title">🔍 Thám tử bắt lỗi</h2>
+                <p class="impostor-subtitle">
+                  Bài thơ đã bị kẻ xấu xâm nhập! Có <strong>${impostorCount} từ bị thay sai</strong>. Hãy click vào chúng để đánh dấu.
+                </p>
+              </div>
+            </div>
+            <div class="impostor-header-right">
+              <div class="impostor-status-pill">
+                Đã chọn: <strong style="color: var(--color-amber-dark); margin-left:4px;">${selectedCount}</strong>
+              </div>
+              ${impostorAttempts > 0 ? `
+                <div class="impostor-status-pill" style="color: var(--color-ink-light); font-size: 0.82rem;">
+                  Lần thử: ${impostorAttempts}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+
+          ${!impostorChecked ? `
+            <div class="impostor-hint-bar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D5A85F" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Click vào từ bạn nghi ngờ là <em>từ bị thay sai</em> (sẽ sáng viền vàng). Nhấn <strong>Kiểm tra</strong> khi xong.</span>
+            </div>
+          ` : ''}
+
+          ${impostorChecked && impostorScore ? `
+            <div class="impostor-result-banner ${impostorScore.correct === impostorScore.total ? 'result-perfect' : impostorScore.correct >= Math.ceil(impostorScore.total * 0.6) ? 'result-good' : 'result-try-again'}">
+              ${impostorScore.correct === impostorScore.total ? `
+                🏆 Xuất sắc! Em đã bắt đúng toàn bộ <strong>${impostorScore.correct}/${impostorScore.total}</strong> từ lỗi!
+              ` : `
+                ⚠️ Bắt được <strong>${impostorScore.correct}/${impostorScore.total}</strong> từ lỗi. Từ lỗi còn sót đang hiển thị màu đỏ với mũi tên đáp án bên dưới.
+              `}
+            </div>
+          ` : ''}
+
+          <div class="impostor-parchment">
+            <div class="poem-header-meta" style="margin-bottom: 16px;">
+              <h3 class="poem-title-display" style="font-size: 1.45rem;">${currentPoem.title}</h3>
+              ${currentPoem.author ? `<p class="poem-author-display">— ${currentPoem.author} —</p>` : ''}
+            </div>
+
+            <div class="impostor-lines">
+              ${impostorLines.map((line, lIdx) => `
+                <div class="impostor-line-row">
+                  <span class="line-number-badge">${lIdx + 1}</span>
+                  <div class="impostor-words-wrapper">
+                    ${line.map((w, wIdx) => {
+                      let cls = 'impostor-word';
+                      if (impostorChecked && w.isRevealed) {
+                        if (w.isImpostor && w.isSelected) cls += ' word-caught-correct';
+                        else if (w.isImpostor && !w.isSelected) cls += ' word-missed-impostor';
+                        else if (!w.isImpostor && w.isSelected) cls += ' word-wrong-selection';
+                      } else {
+                        if (w.isSelected) cls += ' word-suspected';
+                      }
+
+                      return `
+                        <span class="${cls}" onclick="handleImpostorWordClick(${lIdx}, ${wIdx})">
+                          ${w.text}
+                          ${impostorChecked && w.isImpostor && w.isRevealed ? `
+                            <span class="word-correct-tooltip">→ ${w.originalWord}</span>
+                          ` : ''}
+                        </span>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="impostor-controls">
+            <button class="btn btn-secondary" onclick="switchGameMode('rescue')">← Về Giải cứu vần thơ</button>
+            <button class="btn btn-secondary" onclick="initImpostorGame()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span>Đổi bộ từ lỗi mới</span>
+            </button>
+            ${!impostorChecked ? `
+              <button class="btn btn-primary" onclick="checkImpostors()" ${selectedCount === 0 ? 'disabled style="opacity:0.5;"' : ''}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Kiểm tra (${selectedCount} từ đã chọn)</span>
+              </button>
+            ` : `
+              <button class="btn btn-amber" onclick="initImpostorGame()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>Chơi lại từ đầu</span>
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function handleImpostorWordClick(lIdx, wIdx) {
+      if (impostorChecked) return;
+      const word = impostorLines[lIdx][wIdx];
+      word.isSelected = !word.isSelected;
+      sound.pick();
+      renderImpostorGame();
+    }
+
+    function checkImpostors() {
+      const allWords = impostorLines.flat();
+      const selectedImpostors = allWords.filter(w => w.isSelected && w.isImpostor).length;
+
+      impostorChecked = true;
+      impostorScore = { correct: selectedImpostors, total: impostorCount };
+      impostorLines.forEach(line => line.forEach(w => w.isRevealed = true));
+      impostorAttempts++;
+
+      const pct = selectedImpostors / Math.max(impostorCount, 1);
+      if (pct >= 0.8) {
+        sound.fanfare();
+        triggerConfetti();
+      } else if (pct >= 0.5) {
+        sound.correct();
+      } else {
+        sound.wrong();
+      }
+
+      renderImpostorGame();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // CHẾ ĐỘ 3: XẾP LẠI HÀNG NGŨ (SORT LINES)
+    // ═══════════════════════════════════════════════════════════
+    let sortLines = [];
+    let sortLinesChecked = false;
+    let sortLinesScore = null;
+    let sortLinesSelectedIdx = null;
+    let sortLinesDraggedIdx = null;
+    let sortLinesDragOverIdx = null;
+
+    function initSortLinesGame() {
+      const rawLines = (currentPoem.content || '')
+        .normalize('NFC')
+        .split(/\r?\n/)
+        .map(l => l.trim())
+        .filter(l => l.length > 0);
+
+      const original = rawLines.map((text, idx) => ({
+        id: `line-${idx}-${Math.random().toString(36).slice(2, 6)}`,
+        text,
+        originalIndex: idx,
+        currentIndex: idx
+      }));
+
+      let shuffled = [...original];
+      let attempts = 0;
+      do {
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        attempts++;
+      } while (shuffled.every((l, i) => l.originalIndex === i) && attempts < 20);
+
+      sortLines = shuffled.map((l, i) => ({ ...l, currentIndex: i }));
+      sortLinesChecked = false;
+      sortLinesScore = null;
+      sortLinesSelectedIdx = null;
+      sortLinesDraggedIdx = null;
+      sortLinesDragOverIdx = null;
+
+      renderSortLinesGame();
+    }
+
+    function renderSortLinesGame() {
+      const container = document.getElementById('sortLinesModeContainer');
+      if (!container) return;
+
+      let html = `
+        <div class="sort-lines-container">
+          <div class="sort-lines-header">
+            <div class="sort-lines-header-left">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B4CB9" stroke-width="2">
+                <circle cx="9" cy="12" r="1"></circle>
+                <circle cx="9" cy="5" r="1"></circle>
+                <circle cx="9" cy="19" r="1"></circle>
+                <circle cx="15" cy="12" r="1"></circle>
+                <circle cx="15" cy="5" r="1"></circle>
+                <circle cx="15" cy="19" r="1"></circle>
+              </svg>
+              <div>
+                <h2 class="sort-lines-title">🔀 Xếp lại hàng ngũ</h2>
+                <p class="sort-lines-subtitle">
+                  Các câu thơ đã bị xáo trộn! Kéo thả, chạm 2 câu để đổi chỗ hoặc dùng nút ▲ ▼ để sắp xếp lại đúng trật tự.
+                </p>
+              </div>
+            </div>
+            ${sortLinesChecked && sortLinesScore ? `
+              <div class="sort-lines-score-pill ${sortLinesScore.correct === sortLinesScore.total ? 'score-perfect' : sortLinesScore.correct >= sortLinesScore.total * 0.7 ? 'score-good' : 'score-retry'}">
+                ${sortLinesScore.correct}/${sortLinesScore.total} câu đúng vị trí
+              </div>
+            ` : ''}
+          </div>
+
+          ${!sortLinesChecked ? `
+            <div class="impostor-hint-bar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D5A85F" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Kéo thả câu thơ lên/xuống, hoặc <strong>chạm chọn câu thứ nhất ➔ chạm câu thứ hai</strong> để hoán đổi. Nhấn <strong>Kiểm tra</strong> khi xong.</span>
+            </div>
+          ` : ''}
+
+          ${sortLinesChecked && sortLinesScore ? `
+            <div class="impostor-result-banner ${sortLinesScore.correct === sortLinesScore.total ? 'result-perfect' : sortLinesScore.correct >= Math.ceil(sortLinesScore.total * 0.7) ? 'result-good' : 'result-try-again'}">
+              ${sortLinesScore.correct === sortLinesScore.total ? `
+                🏆 Hoàn hảo! Em đã xếp đúng tất cả <strong>${sortLinesScore.total}</strong> câu thơ!
+              ` : `
+                ⚠️ Có <strong>${sortLinesScore.correct}/${sortLinesScore.total}</strong> câu đúng vị trí. Những câu chưa đúng đang hiện màu cam kèm gợi ý.
+              `}
+            </div>
+          ` : ''}
+
+          <div class="sort-lines-parchment">
+            <div class="poem-header-meta" style="margin-bottom: 12px;">
+              <h3 class="poem-title-display" style="font-size: 1.45rem;">${currentPoem.title}</h3>
+              ${currentPoem.author ? `<p class="poem-author-display">— ${currentPoem.author} —</p>` : ''}
+            </div>
+
+            <div class="sort-lines-list">
+              ${sortLines.map((line, idx) => {
+                const isCorrect = sortLinesChecked && line.originalIndex === idx;
+                const isWrong = sortLinesChecked && line.originalIndex !== idx;
+                const isSelected = sortLinesSelectedIdx === idx;
+                const isDragging = sortLinesDraggedIdx === idx;
+                const isDragOver = sortLinesDragOverIdx === idx;
+
+                let cls = 'sort-line-item';
+                if (isDragging) cls += ' sort-line-dragging';
+                if (isDragOver) cls += ' sort-line-dragover';
+                if (isSelected) cls += ' sort-line-selected';
+                if (isCorrect) cls += ' sort-line-correct';
+                if (isWrong) cls += ' sort-line-wrong';
+
+                return `
+                  <div
+                    class="${cls}"
+                    draggable="${!sortLinesChecked}"
+                    onclick="handleSortLineClick(${idx})"
+                    ondragstart="handleSortLineDragStart(event, ${idx})"
+                    ondragover="handleSortLineDragOver(event, ${idx})"
+                    ondrop="handleSortLineDrop(event, ${idx})"
+                    ondragend="handleSortLineDragEnd()"
+                  >
+                    <div class="sort-line-drag-handle" title="Kéo để di chuyển">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${isCorrect ? '#2A8754' : isWrong ? '#D97706' : '#A89B8C'}" stroke-width="2">
+                        <circle cx="9" cy="12" r="1"></circle>
+                        <circle cx="9" cy="5" r="1"></circle>
+                        <circle cx="9" cy="19" r="1"></circle>
+                        <circle cx="15" cy="12" r="1"></circle>
+                        <circle cx="15" cy="5" r="1"></circle>
+                        <circle cx="15" cy="19" r="1"></circle>
+                      </svg>
+                      <span class="sort-line-number">${idx + 1}</span>
+                    </div>
+
+                    <div class="sort-line-text">
+                      ${line.text}
+                      ${isWrong && sortLinesChecked ? `
+                        <span class="sort-line-hint"> (vị trí đúng: câu ${line.originalIndex + 1})</span>
+                      ` : ''}
+                    </div>
+
+                    ${!sortLinesChecked ? `
+                      <div class="sort-line-arrows">
+                        <button class="sort-arrow-btn" onclick="event.stopPropagation(); moveSortLine(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} title="Di chuyển lên">▲</button>
+                        <button class="sort-arrow-btn" onclick="event.stopPropagation(); moveSortLine(${idx}, 1)" ${idx === sortLines.length - 1 ? 'disabled' : ''} title="Di chuyển xuống">▼</button>
+                      </div>
+                    ` : `
+                      <div class="sort-line-status">
+                        ${isCorrect ? '✅' : '❌'}
+                      </div>
+                    `}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="impostor-controls">
+            <button class="btn btn-secondary" onclick="switchGameMode('rescue')">← Về Giải cứu vần thơ</button>
+            <button class="btn btn-secondary" onclick="initSortLinesGame()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span>Xáo trộn lại</span>
+            </button>
+            ${!sortLinesChecked ? `
+              <button class="btn btn-primary" onclick="checkSortLines()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Kiểm tra thứ tự</span>
+              </button>
+            ` : `
+              <button class="btn btn-amber" onclick="initSortLinesGame()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>Chơi lại</span>
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function swapSortLines(fromIdx, toIdx) {
+      const arr = [...sortLines];
+      [arr[fromIdx], arr[toIdx]] = [arr[toIdx], arr[fromIdx]];
+      sortLines = arr.map((l, i) => ({ ...l, currentIndex: i }));
+      sound.snap();
+      renderSortLinesGame();
+    }
+
+    function handleSortLineClick(idx) {
+      if (sortLinesChecked) return;
+      if (sortLinesSelectedIdx === null) {
+        sortLinesSelectedIdx = idx;
+        sound.pick();
+        renderSortLinesGame();
+      } else if (sortLinesSelectedIdx === idx) {
+        sortLinesSelectedIdx = null;
+        renderSortLinesGame();
+      } else {
+        const from = sortLinesSelectedIdx;
+        sortLinesSelectedIdx = null;
+        swapSortLines(from, idx);
+      }
+    }
+
+    function moveSortLine(idx, dir) {
+      const target = idx + dir;
+      if (target < 0 || target >= sortLines.length) return;
+      swapSortLines(idx, target);
+    }
+
+    function handleSortLineDragStart(e, idx) {
+      sortLinesDraggedIdx = idx;
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleSortLineDragOver(e, idx) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (sortLinesDraggedIdx !== null && sortLinesDraggedIdx !== idx) {
+        if (sortLinesDragOverIdx !== idx) {
+          sortLinesDragOverIdx = idx;
+          renderSortLinesGame();
+        }
+      }
+    }
+
+    function handleSortLineDrop(e, targetIdx) {
+      e.preventDefault();
+      if (sortLinesDraggedIdx !== null && sortLinesDraggedIdx !== targetIdx) {
+        swapSortLines(sortLinesDraggedIdx, targetIdx);
+      }
+      sortLinesDraggedIdx = null;
+      sortLinesDragOverIdx = null;
+      renderSortLinesGame();
+    }
+
+    function handleSortLineDragEnd() {
+      sortLinesDraggedIdx = null;
+      sortLinesDragOverIdx = null;
+      renderSortLinesGame();
+    }
+
+    function checkSortLines() {
+      const correctCount = sortLines.filter((l, i) => l.originalIndex === i).length;
+      const total = sortLines.length;
+
+      sortLinesChecked = true;
+      sortLinesScore = { correct: correctCount, total };
+
+      const pct = correctCount / total;
+      if (pct === 1) {
+        sound.fanfare();
+        triggerConfetti();
+      } else if (pct >= 0.7) {
+        sound.correct();
+      } else {
+        sound.wrong();
+      }
+
+      renderSortLinesGame();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // CHẾ ĐỘ 4: MỰC TÀNG HÌNH (INK FADER)
+    // ═══════════════════════════════════════════════════════════
+    let inkFaderLevel = 1;
+    let inkFaderRevealed = new Set();
+    let inkFaderShowAll = false;
+
+    const INK_FADER_LEVEL_CONFIG = {
+      1: {
+        label: 'Cấp 1 — Gợi nhớ',
+        description: 'Ẩn 25% từ cuối câu (vần chân)',
+        icon: '🌤',
+        color: '#377F78'
+      },
+      2: {
+        label: 'Cấp 2 — Tăng tốc',
+        description: 'Ẩn 50% từ trong mỗi câu',
+        icon: '🌥',
+        color: '#D5A85F'
+      },
+      3: {
+        label: 'Cấp 3 — Thử thách',
+        description: 'Chỉ hiện chữ cái đầu của mỗi từ',
+        icon: '☁️',
+        color: '#B83A3A'
+      },
+      4: {
+        label: 'Cấp 4 — Bậc thầy',
+        description: 'Ẩn hoàn toàn — Thuộc lòng 100%',
+        icon: '🌫',
+        color: '#4D4033'
+      }
+    };
+
+    function maskInkFaderWord(word, level, wordIdx, totalWords) {
+      const leadMatch = word.match(/^([.,!?;:"'()«»\[\]…—–]+)/);
+      const trailMatch = word.match(/([.,!?;:"'()«»\[\]…—–]+)$/);
+      const lead = leadMatch ? leadMatch[1] : '';
+      const trail = trailMatch ? trailMatch[1] : '';
+      const core = word.slice(lead.length, word.length - trail.length);
+
+      let masked = core;
+      if (level === 1) {
+        const hideFrom = Math.max(0, Math.floor(totalWords * 0.75));
+        if (wordIdx >= hideFrom) masked = '___';
+      } else if (level === 2) {
+        if (wordIdx % 2 === 0) masked = '___';
+      } else if (level === 3) {
+        if (core.length > 0) masked = core.charAt(0).toUpperCase() + '···';
+      } else if (level === 4) {
+        masked = '▪▪▪';
+      }
+
+      return lead + masked + trail;
+    }
+
+    function initInkFaderGame() {
+      inkFaderRevealed = new Set();
+      inkFaderShowAll = false;
+      renderInkFaderGame();
+    }
+
+    function renderInkFaderGame() {
+      const container = document.getElementById('inkFaderModeContainer');
+      if (!container) return;
+
+      const rawLines = (currentPoem.content || '')
+        .normalize('NFC')
+        .split(/\r?\n/)
+        .map(l => l.trim())
+        .filter(l => l.length > 0);
+
+      const cfg = INK_FADER_LEVEL_CONFIG[inkFaderLevel];
+
+      let html = `
+        <div class="inkfader-container">
+          <div class="inkfader-header">
+            <div class="inkfader-header-left">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A5C54" stroke-width="2">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+              <div>
+                <h2 class="inkfader-title">🌫 Mực tàng hình</h2>
+                <p class="inkfader-subtitle">Luyện thuộc lòng bài thơ theo từng cấp độ ẩn từ tăng dần</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="inkfader-level-selector">
+            ${[1, 2, 3, 4].map(lv => {
+              const c = INK_FADER_LEVEL_CONFIG[lv];
+              const isActive = inkFaderLevel === lv;
+              return `
+                <button
+                  class="inkfader-level-btn ${isActive ? 'level-active' : ''}"
+                  onclick="setInkFaderLevel(${lv})"
+                  style="${isActive ? `border-color: ${c.color}; background: ${c.color}14;` : ''}"
+                >
+                  <span class="level-icon">${c.icon}</span>
+                  <div class="level-info">
+                    <strong style="color: ${isActive ? c.color : 'var(--color-ink)'}">${c.label}</strong>
+                    <span>${c.description}</span>
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="inkfader-tip-bar">
+            <span>${cfg.icon} <strong>${cfg.label}:</strong> ${cfg.description}</span>
+            <span style="color: var(--color-ink-faint); font-size: 0.85rem;">
+              Nhấp vào câu thơ để lật mở · Luyện đọc to trước khi mở
+            </span>
+          </div>
+
+          <div class="inkfader-parchment">
+            <div class="poem-header-meta" style="margin-bottom: 16px;">
+              <h3 class="poem-title-display" style="font-size: 1.45rem;">${currentPoem.title}</h3>
+              ${currentPoem.author ? `<p class="poem-author-display">— ${currentPoem.author} —</p>` : ''}
+            </div>
+
+            <div class="inkfader-lines">
+              ${rawLines.map((line, lIdx) => {
+                const words = line.split(/\s+/).filter(w => w.length > 0);
+                const isLineRevealed = inkFaderRevealed.has(lIdx) || inkFaderShowAll;
+
+                return `
+                  <div
+                    class="inkfader-line-row ${isLineRevealed ? 'line-revealed' : 'line-masked'}"
+                    onclick="toggleInkFaderLine(${lIdx})"
+                    title="${isLineRevealed ? 'Nhấp để che lại' : 'Nhấp để lật mở câu thơ này'}"
+                  >
+                    <span class="line-number-badge">${lIdx + 1}</span>
+                    <div class="inkfader-words-wrapper">
+                      ${words.map((word, wIdx) => {
+                        const masked = maskInkFaderWord(word, inkFaderLevel, wIdx, words.length);
+                        const isMasked = masked !== word && !isLineRevealed;
+                        return `
+                          <span class="inkfader-word ${isMasked ? 'word-hidden' : 'word-visible'}">
+                            ${isLineRevealed ? word : masked}
+                          </span>
+                        `;
+                      }).join('')}
+                    </div>
+                    <span class="inkfader-toggle-icon">
+                      ${isLineRevealed ? `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A8754" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      ` : `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A89B8C" stroke-width="2">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                      `}
+                    </span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="impostor-controls">
+            <button class="btn btn-secondary" onclick="switchGameMode('rescue')">← Về Giải cứu vần thơ</button>
+            <button class="btn btn-secondary" onclick="setInkFaderLevel(${Math.max(1, inkFaderLevel - 1)})" ${inkFaderLevel === 1 ? 'disabled' : ''}>
+              ◀ Cấp dễ hơn
+            </button>
+            <button class="btn ${inkFaderShowAll ? 'btn-amber' : 'btn-secondary'}" onclick="toggleInkFaderShowAll()">
+              ${inkFaderShowAll ? '👁️‍🗨️ Che lại tất cả' : '👁️ Hiện tất cả'}
+            </button>
+            <button class="btn btn-secondary" onclick="initInkFaderGame()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span>Che lại</span>
+            </button>
+            <button class="btn btn-primary" onclick="setInkFaderLevel(${Math.min(4, inkFaderLevel + 1)})" ${inkFaderLevel === 4 ? 'disabled' : ''}>
+              Cấp khó hơn ▶
+            </button>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function setInkFaderLevel(lv) {
+      inkFaderLevel = lv;
+      inkFaderRevealed = new Set();
+      inkFaderShowAll = false;
+      sound.snap();
+      renderInkFaderGame();
+    }
+
+    function toggleInkFaderLine(lIdx) {
+      if (inkFaderRevealed.has(lIdx)) {
+        inkFaderRevealed.delete(lIdx);
+      } else {
+        inkFaderRevealed.add(lIdx);
+        sound.snap();
+      }
+      renderInkFaderGame();
+    }
+
+    function toggleInkFaderShowAll() {
+      inkFaderShowAll = !inkFaderShowAll;
+      sound.snap();
+      renderInkFaderGame();
+    }
+
+    // 14. HƯỚNG DẪN SỬ DỤNG
+    function openHelpModal() {
+      const html = `
+        <div class="modal-overlay">
+          <div class="modal-card" style="max-width: 660px;">
+            <div class="modal-header">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div class="brand-icon" style="width:36px; height:36px; font-size:1.1rem;">📖</div>
+                <div>
+                  <h3 style="margin:0; color: var(--color-emerald-dark); font-size:1.25rem;">Hướng dẫn sử dụng website</h3>
+                  <p style="margin:0; font-size:0.82rem; color: var(--color-ink-light);">Giải cứu vần thơ — Dành cho Giáo viên & Học sinh Ngữ văn 6 - 7</p>
+                </div>
+              </div>
+              <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" style="display:flex; flex-direction:column; gap: 14px;">
+              <div style="background:var(--bg-parchment-light); padding:12px 16px; border-radius:12px; border:1px solid #E1D3B0;">
+                <strong style="color:var(--color-emerald-dark)">🌟 4 Chế độ học tập tương tác:</strong>
+                <ul style="margin:6px 0 0 18px; font-size:0.9rem; line-height:1.6;">
+                  <li><strong>💨 Giải cứu vần thơ:</strong> Gió thổi bay các con chữ ra khỏi bài thơ. Kéo thả hoặc click chọn thẻ rồi click ô đích để hoàn thành bài thơ.</li>
+                  <li><strong>🔍 Thám tử bắt lỗi:</strong> Bài thơ bị thay đổi một số từ! Học sinh click vào từ nghi ngờ sai rồi kiểm tra.</li>
+                  <li><strong>🔀 Xếp lại hàng ngũ:</strong> Các câu thơ bị đảo lộn trật tự. Kéo thả, bấm ▲ ▼ hoặc chạm 2 câu để hoán đổi về đúng vị trí bài thơ.</li>
+                  <li><strong>🌫 Mực tàng hình:</strong> Luyện học thuộc lòng với 4 cấp độ che chữ tăng dần (ẩn vần chân → ẩn 50% → chỉ hiện chữ cái đầu → ẩn 100%). Chạm câu thơ để lật mở.</li>
+                </ul>
+              </div>
+              <div style="background:var(--bg-parchment-light); padding:12px 16px; border-radius:12px; border:1px solid #E1D3B0;">
+                <strong style="color:var(--color-emerald-dark)">1. Kéo thả & Chạm linh hoạt:</strong>
+                <p style="margin-top:4px; font-size:0.9rem; line-height:1.5;">
+                  Kéo thả chuột hoặc <strong>Chạm chọn thẻ ➔ Chạm ô đích</strong> trên bảng tương tác thông minh, tránh trượt hay rơi chữ.
+                </p>
+              </div>
+              <div style="background:var(--bg-parchment-light); padding:12px 16px; border-radius:12px; border:1px solid #E1D3B0;">
+                <strong style="color:var(--color-emerald-dark)">2. Gợi ý 3 cấp & Kiểm tra sư phạm:</strong>
+                <p style="margin-top:4px; font-size:0.9rem; line-height:1.5;">
+                  Kiểm tra báo xanh/cam trực quan (không tự điền đáp án). Gợi ý hỗ trợ hiện chữ đầu ô, đánh dấu vần điệu hoặc cứu nguy 1 từ.
+                </p>
+              </div>
+              <div style="background:var(--bg-parchment-light); padding:12px 16px; border-radius:12px; border:1px solid #E1D3B0;">
+                <strong style="color:var(--color-emerald-dark)">3. Chế độ máy chiếu 16:9 & Toàn màn hình:</strong>
+                <p style="margin-top:4px; font-size:0.9rem; line-height:1.5;">
+                  Nhấn nút <strong>Máy chiếu</strong> để phóng to font chữ cực đại cho cả lớp dễ dàng quan sát từ cuối phòng học.
+                </p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" onclick="closeModal()">Đã hiểu</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalContainer').innerHTML = html;
+    }
+
+    function closeModal() {
+      document.getElementById('modalContainer').innerHTML = '';
+    }
+
+    // 15. CHẾ ĐỘ MÁY CHIẾU & TOÀN MÀN HÌNH
+    function toggleProjectorMode() {
+      document.body.classList.toggle('projector-mode');
+      const isProj = document.body.classList.contains('projector-mode');
+      document.getElementById('txtProjector').textContent = isProj ? 'Máy chiếu: Bật' : 'Máy chiếu';
+      const btn = document.getElementById('btnProjector');
+      if (isProj) {
+        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-secondary');
+      } else {
+        btn.classList.add('btn-secondary');
+        btn.classList.remove('btn-primary');
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Phím tắt bàn phím Ctrl+Z để Hoàn tác
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        handleUndo();
+      }
+    });
+
+    // KHỞI ĐỘNG BAN ĐẦU
+    window.addEventListener('DOMContentLoaded', () => {
+      const poems = getStoredPoems();
+      startPoem(poems[0]);
+    });
+  </script>
+</body>
+</html>
